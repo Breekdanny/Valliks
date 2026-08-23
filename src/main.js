@@ -1,0 +1,161 @@
+/* ==========================================================================
+   VALLIKS — نقطة الدخول. كتربط كلشي.
+   ========================================================================== */
+
+import './styles/fonts.css';
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/components/hero.css';
+import './styles/components/shop.css';
+import './styles/components/custom.css';
+import './styles/components/info.css';
+import './styles/components/order.css';
+
+import { PRODUCTS, CITIES, SIZES, SHOP } from './data/products.js';
+import { initI18n, toggleLang, onLangChange, t, pick, money, getLang } from './i18n/index.js';
+import { createCarousel } from './lib/carousel.js';
+import { initReveal, initScrollState } from './lib/motion.js';
+import { contactLink } from './lib/whatsapp.js';
+import { createOrderModal } from './components/order.js';
+import { createCustomSection } from './components/custom.js';
+import {
+  renderSlides,
+  renderGrid,
+  renderSizeTable,
+  renderCitySelect,
+  renderFooterCities,
+  renderMarquee,
+} from './components/grid.js';
+
+const $ = (id) => document.getElementById(id);
+
+/* ---------- 1. اللغة والاتجاه ---------- */
+initI18n();
+
+/* ---------- 2. الأقسام الثابتة ---------- */
+renderSizeTable($('sizeRows'), SIZES);
+renderCitySelect($('iCity'), CITIES);
+renderFooterCities($('footerCities'), CITIES);
+renderMarquee($('marquee1'), $('marquee2'));
+$('year').textContent = new Date().getFullYear();
+
+/* ---------- 3. نافذة الطلب (بعد ما تتعمر المدن) ---------- */
+const modal = createOrderModal();
+
+/* ---------- 4. الكاروسيل ثلاثي الأبعاد ---------- */
+const stage = $('stage');
+const ring = $('ring');
+const dots = $('dots');
+const hint = $('stageHint');
+
+renderSlides(ring, dots);
+
+let activeIndex = 0;
+
+function paintHero(i) {
+  activeIndex = i;
+  const p = PRODUCTS[i];
+
+  $('heroTag').textContent = pick(p.tag);
+  $('heroName').textContent = pick(p.name);
+  $('heroPrice').innerHTML =
+    money(p.price) +
+    (p.was ? `<span class="hero__was">${money(p.was)}</span>` : '');
+
+  $('stickyPrice').innerHTML = `${money(p.price)}<small>${pick(p.name)}</small>`;
+  stage.setAttribute('aria-label', pick(p.name));
+}
+
+const carousel = createCarousel({
+  stage,
+  ring,
+  dots,
+  count: PRODUCTS.length,
+  onChange: (i) => {
+    paintHero(i);
+    hint.dataset.used = 'true';      // الزائر فهم كيفاش كتخدم — كنخبيو التلميح
+  },
+});
+
+paintHero(0);
+
+dots.addEventListener('click', (e) => {
+  const btn = e.target.closest('.stage__dot');
+  if (btn) carousel.goTo([...dots.children].indexOf(btn));
+});
+
+/* التلميح كيتبدل حسب الجهاز: "سحب" ف الحاسوب، "سويب" ف الهاتف */
+if (matchMedia('(hover: none)').matches) {
+  hint.querySelector('span').dataset.i18n = 'hero.swipe';
+  hint.querySelector('span').textContent = t('hero.swipe');
+}
+
+/* ---------- 5. شبكة المنتوجات ---------- */
+renderGrid($('grid'), { onOrder: (id, v) => modal.open(id, v) });
+
+/* ---------- 5b. قسم "صمم ديالك" ---------- */
+const custom = createCustomSection({
+  onOrder: (id, v, opts) => modal.open(id, v, opts),
+});
+
+/* ---------- 6. أزرار الطلب ---------- */
+$('heroOrder').addEventListener('click', () => modal.open(PRODUCTS[activeIndex].id));
+$('stickyBtn').addEventListener('click', () => modal.open(PRODUCTS[activeIndex].id));
+
+/* ---------- 7. روابط واتساب والسوشيال ---------- */
+function paintLinks() {
+  const url = contactLink(SHOP.whatsapp, getLang());
+  $('waHeader').href = url;
+  $('waFooter').href = url;
+
+  const socials = $('socials');
+  socials.innerHTML = '';
+  const nets = [
+    ['instagram', SHOP.instagram,
+      'M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.2a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2zm0 10.9a4.3 4.3 0 1 1 0-8.6 4.3 4.3 0 0 1 0 8.6zm8.4-11.2a1.5 1.5 0 1 1-3.1 0 1.5 1.5 0 0 1 3.1 0z'],
+    ['tiktok', SHOP.tiktok,
+      'M16.6 5.8a4.8 4.8 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.7 5.7 0 1 0 4.9 5.7V9.2a7.8 7.8 0 0 0 4.5 1.4V7.5a4.7 4.7 0 0 1-3.5-1.7z'],
+  ];
+
+  nets.forEach(([name, href, path]) => {
+    if (!href) return;                 // ماكاينش الرابط → ماكايناش الأيقونة
+    const a = document.createElement('a');
+    a.className = 'icon-btn';
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.setAttribute('aria-label', name);
+    a.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${path}"/></svg>`;
+    socials.append(a);
+  });
+}
+paintLinks();
+
+/* ---------- 8. الحركة ---------- */
+initScrollState({ header: $('header'), sticky: $('sticky') });
+initReveal();
+
+/* ---------- 9. تبديل اللغة ---------- */
+$('langBtn').addEventListener('click', toggleLang);
+
+onLangChange(() => {
+  // كل حاجة معمّرة من الداتا خاصها تتعاود. النصوص المعلّمة بـdata-i18n
+  // كيتكلف بيها applyTo داخل initI18n → paint().
+  renderSizeTable($('sizeRows'), SIZES);
+  renderFooterCities($('footerCities'), CITIES);
+  renderMarquee($('marquee1'), $('marquee2'));
+  renderGrid($('grid'), { onOrder: (id, v) => modal.open(id, v) });
+  custom.refresh();
+  modal.refresh();
+  paintHero(activeIndex);
+  paintLinks();
+
+  // السلايدات كنحدثو غير النصوص البديلة — ماكنعاودوش نبنيو الكاروسيل
+  // باش الزاوية الحالية والدوران مايتصفروش تحت رجلين الزائر.
+  [...ring.children].forEach((slide, i) => {
+    slide.querySelector('img').alt = pick(PRODUCTS[i].name);
+    dots.children[i]?.setAttribute('aria-label', pick(PRODUCTS[i].name));
+  });
+
+  initReveal();
+});

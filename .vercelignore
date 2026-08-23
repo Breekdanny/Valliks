@@ -1,0 +1,7 @@
+# Vercel كيرفع المجلد كامل قبل ما يبني. هادو ماعندهم علاقة بالبناء:
+# raw/ = مصادر الصور (11 MB)، وscripts/ = معالجة بـPython ماكتجريش ف Vercel.
+raw/
+scripts/
+dist/
+node_modules/
+README.md

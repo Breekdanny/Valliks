@@ -1,0 +1,218 @@
+/* ==========================================================================
+   أقسام الثقة: جدول القياسات · قصة الطباعة · علاش حنا · الأسئلة.
+
+   جدول القياسات بالسنتيمتر هو أهم قسم ف الصفحة كاملة. المواقع المولّدة
+   عمرها ماكتحط أرقام حقيقية — كتكتب "قياسات متوفرة". الأرقام الحقيقية
+   كتقلل الإرجاع وكترفع الثقة أكثر من أي نص تسويقي.
+   ========================================================================== */
+
+/* ---------- جدول القياسات ---------- */
+
+.sizes {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 1.35fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+.size-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+}
+
+.size-table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  min-inline-size: 380px;
+}
+.size-table th,
+.size-table td {
+  padding: 0.85rem 1rem;
+  text-align: start;
+  border-block-end: 1px solid var(--line-soft);
+}
+.size-table thead th {
+  background: rgba(212, 166, 42, 0.08);
+  color: var(--gold);
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+}
+html[lang='ar'] .size-table thead th { text-transform: none; letter-spacing: 0; }
+
+.size-table tbody th {
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-size: 1.05rem;
+  color: var(--text);
+  inline-size: 1%;
+  white-space: nowrap;
+}
+.size-table td { color: var(--text-dim); }
+.size-table tbody tr:last-child th,
+.size-table tbody tr:last-child td { border-block-end: 0; }
+.size-table tbody tr:hover { background: rgba(242, 239, 230, 0.025); }
+.size-table td::after { content: ' cm'; color: var(--text-faint); font-size: 0.78em; }
+
+.size-note {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem;
+  margin-block-start: 1.25rem;
+  border-inline-start: 2px solid var(--gold);
+  background: rgba(212, 166, 42, 0.05);
+  color: var(--text-dim);
+  font-size: var(--t-sm);
+}
+
+/* ---------- قصة الطباعة ---------- */
+
+.story {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+.story__copy { display: grid; gap: 1.1rem; }
+.story__copy h2 { font-size: var(--t-h1); }
+.story__copy p { color: var(--text-dim); max-inline-size: 52ch; }
+
+.stats {
+  display: flex;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  margin-block-start: 1rem;
+  flex-wrap: wrap;
+}
+.stat { display: grid; gap: 0.15rem; }
+.stat b {
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+  color: var(--gold);
+}
+.stat span {
+  font-size: var(--t-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+html[lang='ar'] .stat span { text-transform: none; letter-spacing: 0.02em; }
+
+/* التيشيرت الخاوي طايف — نفس لغة الـhero البصرية */
+.story__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1100px;
+}
+.story__art img {
+  inline-size: min(100%, 420px);
+  transform: rotateY(-11deg) rotateX(4deg);
+  filter: drop-shadow(0 34px 46px rgba(0, 0, 0, 0.75));
+}
+.story__art::before {
+  content: '';
+  position: absolute;
+  inline-size: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(36, 71, 232, 0.24), transparent 68%);
+  filter: blur(46px);
+  z-index: -1;
+}
+
+/* ---------- علاش حنا ---------- */
+
+.reasons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  counter-reset: r;
+}
+.reason {
+  counter-increment: r;
+  padding: clamp(1.4rem, 2.5vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease-out);
+}
+.reason:hover { border-color: var(--line); transform: translateY(-4px); }
+
+/* رقم بدل أيقونة. أيقونات lucide/heroicons العامة هي توقيع القوالب المولّدة. */
+.reason::before {
+  content: '0' counter(r);
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  line-height: 0.85;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--gold);
+  text-stroke: 1.5px var(--gold);
+  opacity: 0.85;
+}
+.reason h3 { font-size: var(--t-h3); font-family: var(--f-display); font-weight: var(--display-weight); }
+.reason p { color: var(--text-dim); font-size: var(--t-sm); }
+
+/* ---------- الأسئلة ---------- */
+
+.faq { display: grid; gap: 0.6rem; max-inline-size: 62rem; }
+
+.faq details {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  transition: border-color var(--dur) var(--ease);
+}
+.faq details[open] { border-color: var(--line); }
+
+.faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 1.15rem 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 700;
+  font-size: clamp(0.98rem, 1.4vw, 1.1rem);
+}
+.faq summary::-webkit-details-marker { display: none; }
+
+.faq summary::after {
+  content: '';
+  margin-inline-start: auto;
+  inline-size: 11px;
+  block-size: 11px;
+  border-inline-end: 2px solid var(--gold);
+  border-block-end: 2px solid var(--gold);
+  transform: rotate(45deg);
+  transition: transform var(--dur) var(--ease);
+  flex: 0 0 auto;
+}
+.faq details[open] summary::after { transform: rotate(-135deg); }
+
+.faq p {
+  padding: 0 1.35rem 1.35rem;
+  color: var(--text-dim);
+  font-size: var(--t-sm);
+  line-height: 1.7;
+  max-inline-size: 68ch;
+}
+
+/* ---------- الهاتف ---------- */
+
+@media (max-width: 900px) {
+  .sizes, .story { grid-template-columns: 1fr; }
+  .reasons { grid-template-columns: 1fr; }
+  .story__art { order: -1; }
+  .story__art img { inline-size: min(72%, 320px); }
+}

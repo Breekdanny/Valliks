@@ -1,0 +1,246 @@
+/* ==========================================================================
+   قسم "صمم ديالك".
+
+   الكلاسات `.field` و`.chip` و`.chips` معرفة ف order.css وكيتعاد استعمالهم
+   هنا كما هوما — نفس الفورم، نفس الإحساس. هاد الملف كيزيد غير اللي خاص
+   بهاد القسم: المعاينة، معرض الرسمات، والسلايدر.
+   ========================================================================== */
+
+.studio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+/* ---------- المعاينة ---------- */
+
+/* المعاينة كتبقى ف العين ملي كيمرر الزبون على الرسمات والقياسات — كل تبديل
+   خاصو يبان فاللحظة بلا ما يرجع للفوق. */
+.studio__preview {
+  position: sticky;
+  inset-block-start: calc(var(--header-h, 72px) + 1rem);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.studio__preview canvas {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1;
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+
+  /* السحب كيتحكم ف الطبعة، فالمتصفح ماخاصوش ياخد اللمسة للتمرير. باقي
+     الصفحة كاملة كتمرر عادي — هادي غير منطقة المعاينة. */
+  touch-action: none;
+  cursor: grab;
+}
+.studio__preview canvas[data-dragging='true'] { cursor: grabbing; }
+.studio__preview canvas:focus-visible {
+  outline: 2px solid var(--royal);
+  outline-offset: 3px;
+}
+
+/* ---------- سطر الموضع ---------- */
+
+.place {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.place__out {
+  font-size: var(--t-sm);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.place .btn { padding: 0.5rem 0.85rem; font-size: var(--t-xs); }
+
+.studio__warn {
+  padding: 0.7rem 0.9rem;
+  background: rgba(226, 85, 75, 0.1);
+  border: 1px solid rgba(226, 85, 75, 0.4);
+  border-radius: var(--r);
+  color: #f3a49d;
+  font-size: var(--t-sm);
+  line-height: 1.5;
+}
+
+/* ---------- التحكم ---------- */
+
+.studio__controls {
+  display: grid;
+  gap: 1.3rem;
+  align-content: start;
+}
+
+.field__note {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+/* ---------- معرض الرسمات ---------- */
+
+.designs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 0.6rem;
+}
+
+.design {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.6rem 0.5rem;
+  background: var(--raised);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+.design:hover { border-color: var(--gold); color: var(--text); }
+.design[aria-pressed='true'] {
+  border-color: var(--gold);
+  background: rgba(212, 166, 42, 0.09);
+  color: var(--text);
+}
+
+/* الرسمات فيهم ألوان فاتحة ومظلمة على حد سواء. سطح داكن موحّد تحتهم كيخلي
+   الشبكة متناسقة وكيبين الرسمات الفاتحة بحال الغرافيتي الأبيض.
+
+   ⚠ الصورة كتاخد الصندوق كامل مع object-fit: contain، ماشي max-block-size:
+   100%. النسخة الأولى كانت كتعتمد على النسبة المئوية ديال الارتفاع وماكانتش
+   كتحد الصورة — الرسمة كانت كتخرج على البطاقة وكتغطي السمية تحتها.
+   overflow: hidden ضمانة ثانية باش حتى شي حاجة ماتخرج. */
+.design__art {
+  display: block;          /* سبان — بلا هادشي block-size وoverflow ماكيخدموش */
+  block-size: 88px;
+  padding: 0.3rem;
+  overflow: hidden;
+  background: var(--sunken);
+  border-radius: 2px;
+}
+.design__art img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+/* البطاقة ديال الزبون فيها علامة + عوض صورة — كتحتاج توسيط */
+.design--own .design__art {
+  display: grid;
+  place-items: center;
+}
+
+.design__name {
+  font-size: var(--t-xs);
+  font-weight: 700;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.design--own .design__art {
+  border: 1px dashed var(--line);
+  background: transparent;
+}
+.design__plus {
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--gold);
+  font-weight: 300;
+}
+
+/* ---------- سلايدر حجم الطباعة ---------- */
+
+.slider {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.slider output {
+  min-inline-size: 68px;
+  text-align: center;
+  padding: 0.35rem 0.5rem;
+  background: var(--raised);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  font-weight: 700;
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.slider input[type='range'] {
+  flex: 1;
+  min-inline-size: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.slider input[type='range']::-webkit-slider-runnable-track {
+  block-size: 4px;
+  background: var(--line-soft);
+  border-radius: 2px;
+}
+.slider input[type='range']::-moz-range-track {
+  block-size: 4px;
+  background: var(--line-soft);
+  border-radius: 2px;
+}
+.slider input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  inline-size: 20px;
+  block-size: 20px;
+  margin-block-start: -8px;
+  background: var(--gold);
+  border: 0;
+  border-radius: 50%;
+  cursor: grab;
+}
+.slider input[type='range']::-moz-range-thumb {
+  inline-size: 20px;
+  block-size: 20px;
+  background: var(--gold);
+  border: 0;
+  border-radius: 50%;
+  cursor: grab;
+}
+.slider input[type='range']:focus-visible { outline: 2px solid var(--royal); outline-offset: 4px; }
+
+/* ---------- نقطة اللون ف شريحة التيشيرت ---------- */
+
+.chip--swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.chip__dot {
+  inline-size: 13px;
+  block-size: 13px;
+  border-radius: 50%;
+  background: var(--sw);
+  border: 1px solid rgba(242, 239, 230, 0.35);
+  flex: none;
+}
+
+/* ---------- الهاتف ---------- */
+
+@media (max-width: 860px) {
+  .studio { grid-template-columns: 1fr; }
+  .studio__preview {
+    position: static;           /* اللصق على الهاتف كياكل نص الشاشة */
+    max-inline-size: 420px;
+    margin-inline: auto;
+    inline-size: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .designs { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+  .design__art { block-size: 74px; }
+}

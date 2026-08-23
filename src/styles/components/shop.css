@@ -1,0 +1,199 @@
+/* ==========================================================================
+   شبكة المنتوجات.
+   التخطيط غير متماثل عمداً: بطاقتين كبار فوق وثلاثة تحت. الشبكة المنتظمة
+   3×3 هي أول حاجة كتخلي الموقع يبان قالب.
+   ========================================================================== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+.card:nth-child(1),
+.card:nth-child(2) { grid-column: span 6; }
+.card:nth-child(n + 3) { grid-column: span 4; }
+
+/* ---------- البطاقة ---------- */
+
+.card {
+  --rx: 0deg;
+  --ry: 0deg;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 260ms var(--ease-out),
+              border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+.card:hover {
+  border-color: var(--line);
+  box-shadow: var(--shadow-lift);
+}
+
+/* خط ضوء ذهبي كيعبر السطح عند التمرير */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgba(212, 166, 42, 0.14) 48%,
+    rgba(237, 201, 99, 0.26) 51%,
+    rgba(212, 166, 42, 0.14) 54%,
+    transparent 64%
+  );
+  background-size: 260% 260%;
+  background-position: 140% 140%;
+  opacity: 0;
+  transition: background-position 900ms var(--ease-out), opacity 300ms var(--ease);
+}
+.card:hover::before {
+  opacity: 1;
+  background-position: -40% -40%;
+}
+
+.card__media {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+/* البطاقتين الكبار كيولّيو طوال بزاف بنسبة 1:1 على شاشة عريضة. 5:4 كتقص
+   غير 10% من فوق و10% من تحت — وهادوك رمادي خاوي ف الأصل، التيشيرت ماكيتقصش. */
+.card:nth-child(-n + 2) .card__media { aspect-ratio: 5 / 4; }
+.card__media img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform 620ms var(--ease-out), opacity 260ms var(--ease);
+  transform: translateZ(24px) scale(1.02);   /* الصورة طايفة شوية فوق البطاقة */
+}
+.card:hover .card__media img { transform: translateZ(34px) scale(1.06); }
+.card__media img[data-swapping='true'] { opacity: 0; }
+
+.card__badge {
+  position: absolute;
+  inset-block-start: 0.85rem;
+  inset-inline-start: 0.85rem;
+  z-index: 2;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.6rem;
+  border-radius: 2px;
+  transform: rotate(-2.5deg);        /* مائلة شوية — التفاصيل المنتظمة مية بالمية كتبان قالب */
+}
+html[lang='ar'] .card__badge { text-transform: none; letter-spacing: 0; }
+
+.card__body {
+  padding: clamp(1rem, 1.8vw, 1.4rem);
+  display: grid;
+  gap: 0.55rem;
+  flex: 1;
+  align-content: start;
+}
+
+.card__tag {
+  font-size: var(--t-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+html[lang='ar'] .card__tag { text-transform: none; letter-spacing: 0.02em; }
+
+.card__name {
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-size: var(--t-h3);
+  line-height: 1.1;
+}
+
+.card__desc {
+  color: var(--text-dim);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card__foot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-block-start: auto;
+  padding: 0 clamp(1rem, 1.8vw, 1.4rem) clamp(1rem, 1.8vw, 1.4rem);
+}
+
+.card__price {
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-size: 1.35rem;
+  color: var(--gold);
+  margin-inline-end: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.card__was {
+  font-family: var(--f-body);
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+/* ---------- اختيار اللون ---------- */
+
+.swatches {
+  display: flex;
+  gap: 0.4rem;
+  padding-inline: clamp(1rem, 1.8vw, 1.4rem);
+}
+.swatch {
+  inline-size: 22px;
+  block-size: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-soft);
+  background: var(--sw);
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--spring);
+}
+.swatch:hover { transform: scale(1.14); }
+.swatch[aria-pressed='true'] {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(212, 166, 42, 0.22);
+}
+
+/* ---------- الهاتف ---------- */
+
+@media (max-width: 900px) {
+  .card:nth-child(1),
+  .card:nth-child(2),
+  .card:nth-child(n + 3) { grid-column: span 6; }
+}
+
+@media (max-width: 600px) {
+  .card:nth-child(n) { grid-column: span 12; }
+  .card { transform: none; }        /* الميلان بالفأرة ماكاينش ف اللمس */
+  .card__media img { transform: none; }
+  .card:hover .card__media img { transform: none; }
+}

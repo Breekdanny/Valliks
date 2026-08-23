@@ -1,0 +1,18 @@
+{
+  "name": "valliks",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "VALLIKS — متجر تيشيرتات oversized مطبوعة بالمغرب",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "images": "python scripts/prep-images.py",
+    "designs": "python scripts/prep-images.py designs",
+    "fonts": "node scripts/fetch-fonts.mjs"
+  },
+  "devDependencies": {
+    "vite": "^8.2.1"
+  }
+}

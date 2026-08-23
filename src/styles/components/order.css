@@ -1,0 +1,276 @@
+/* ==========================================================================
+   نافذة الطلب + الفورم + الشريط السفلي.
+
+   ماكاينش سلة ولا خطوات متعددة ولا حساب. الزبون المغربي كيطلب بالدفع عند
+   الاستلام: المنتج، القياس، اللون، والمعلومات — وصافي. كل خطوة زايدة
+   ف الطريق كتضيع طلبات.
+   ========================================================================== */
+
+.modal {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-inline-size: min(980px, 100%);
+  inline-size: 100%;
+  max-block-size: 100dvh;
+  color: var(--text);
+  overflow: visible;
+}
+.modal::backdrop {
+  background: rgba(4, 4, 6, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+/* الـdialog كياخد التركيز ملي كيتحل، وخط التركيز كيرسم إطار أزرق حول
+   النافذة كاملة. هو ماشي عنصر تفاعلي، إذن ماخاصوش يبان. العناصر اللي
+   داخلو كتحتافظ بخط التركيز ديالها عادي. */
+.modal:focus,
+.modal:focus-visible { outline: none; }
+
+.modal__panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  max-block-size: min(92dvh, 900px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
+
+.modal[open] .modal__panel {
+  animation: modal-in 420ms var(--ease-out);
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+}
+
+.modal__close {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  z-index: 5;
+  background: rgba(8, 8, 10, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+/* ---------- الجهة اليسرى: المنتج ---------- */
+
+/* التيشيرت كيبقى ف عينك ملي كتعمر الفورم وكتمرر — الزبون خاصو يشوف
+   شنو كيطلب حتى النهاية، ماشي يبقى كيعمر حقول بلا سياق. */
+.modal__art {
+  position: sticky;
+  inset-block-start: 0;
+  align-self: start;
+  background: var(--sunken);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  border-inline-end: 1px solid var(--line-soft);
+}
+.modal__art img {
+  inline-size: 100%;
+  border-radius: var(--r);
+  background: var(--surface);
+}
+.modal__title {
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-size: var(--t-h3);
+}
+.modal__desc { color: var(--text-dim); font-size: var(--t-sm); }
+
+/* ---------- الجهة اليمنى: الفورم ---------- */
+
+.modal__form {
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  display: grid;
+  gap: 1.1rem;
+  align-content: start;
+}
+
+.field { display: grid; gap: 0.4rem; }
+.field > label {
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+html[lang='ar'] .field > label { text-transform: none; letter-spacing: 0; }
+
+.field input,
+.field select,
+.field textarea {
+  inline-size: 100%;
+  padding: 0.8rem 0.95rem;
+  background: var(--raised);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  color: var(--text);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.field input::placeholder,
+.field textarea::placeholder { color: var(--text-faint); }
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--royal);
+  background: var(--surface);
+}
+.field textarea { resize: vertical; min-block-size: 68px; }
+
+/* التيليفون دايماً LTR حتى ف الواجهة العربية — الأرقام ماكتتقلبش */
+.field input[type='tel'] { direction: ltr; text-align: start; }
+html[dir='rtl'] .field input[type='tel'] { text-align: right; }
+
+.field[data-invalid='true'] input,
+.field[data-invalid='true'] select,
+.field[data-invalid='true'] textarea { border-color: #e2554b; }
+
+.field__err {
+  font-size: var(--t-xs);
+  color: #f08a82;
+  display: none;
+}
+.field[data-invalid='true'] .field__err { display: block; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+
+/* ---------- اختيار القياس ---------- */
+
+.chips { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+.chip {
+  min-inline-size: 52px;
+  padding: 0.6rem 0.8rem;
+  background: var(--raised);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  color: var(--text-dim);
+  font-weight: 700;
+  font-size: var(--t-sm);
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+.chip:hover { border-color: var(--gold); color: var(--text); }
+.chip[aria-pressed='true'] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+/* ---------- الكمية ---------- */
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--raised);
+  inline-size: fit-content;
+}
+.qty button {
+  inline-size: 40px;
+  block-size: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.qty button:hover { background: rgba(212, 166, 42, 0.1); color: var(--gold); }
+.qty output {
+  inline-size: 46px;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- الفاتورة ---------- */
+
+.bill {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem 1.1rem;
+  background: var(--sunken);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+}
+.bill__row { display: flex; justify-content: space-between; gap: 1rem; color: var(--text-dim); }
+.bill__row--total {
+  padding-block-start: 0.6rem;
+  border-block-start: 1px solid var(--line-soft);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+.bill__row--total span:last-child { color: var(--gold); }
+.bill__free { color: #4ec97a; font-weight: 700; }
+
+.modal__hint {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+  text-align: center;
+}
+.modal__ref {
+  font-size: var(--t-xs);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- الشريط السفلي (الهاتف) ---------- */
+
+.sticky {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 90;
+  display: none;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+  background: rgba(8, 8, 10, 0.93);
+  backdrop-filter: blur(14px);
+  border-block-start: 1px solid var(--line);
+  transform: translateY(110%);
+  transition: transform 420ms var(--ease-out);
+}
+.sticky[data-show='true'] { transform: none; }
+.sticky__price {
+  font-family: var(--f-display);
+  font-weight: var(--display-weight);
+  font-size: 1.25rem;
+  color: var(--gold);
+  margin-inline-end: auto;
+  line-height: 1.1;
+}
+.sticky__price small {
+  display: block;
+  font-family: var(--f-body);
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
+
+@media (max-width: 860px) {
+  .sticky { display: flex; }
+  body { padding-block-end: 72px; }
+  .modal__panel { grid-template-columns: 1fr; }
+  .modal__art {
+    position: static;          /* على الهاتف اللصق كياكل نص الشاشة */
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--line-soft);
+  }
+  .modal__art img { max-inline-size: 220px; margin-inline: auto; }
+}
+
+@media (max-width: 420px) {
+  .row { grid-template-columns: 1fr; }
+}
