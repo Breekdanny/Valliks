@@ -107,7 +107,7 @@
 .design:hover { border-color: var(--gold); color: var(--text); }
 .design[aria-pressed='true'] {
   border-color: var(--gold);
-  background: rgba(212, 166, 42, 0.09);
+  background: rgb(var(--gold-rgb) / 0.09);
   color: var(--text);
 }
 

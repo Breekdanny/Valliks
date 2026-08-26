@@ -45,8 +45,8 @@
   transform: translateX(-50%);
   background: radial-gradient(
     circle,
-    rgba(212, 166, 42, 0.19) 0%,
-    rgba(212, 166, 42, 0.06) 42%,
+    rgb(var(--gold-rgb) / 0.19) 0%,
+    rgb(var(--gold-rgb) / 0.06) 42%,
     transparent 68%
   );
 }
@@ -95,7 +95,7 @@
   margin-block-end: 0.9rem;
   border: 1px solid var(--line);
   border-radius: 100px;
-  background: rgba(212, 166, 42, 0.05);
+  background: rgb(var(--gold-rgb) / 0.05);
   color: var(--gold);
   font-family: var(--f-body);
   font-size: var(--t-xs);
@@ -203,7 +203,7 @@ html[lang='ar'] .hero h1 .hollow {
   z-index: -1;
   border-radius: 46% / 40%;
   background:
-    radial-gradient(closest-side, rgba(212, 166, 42, 0.16), transparent 74%),
+    radial-gradient(closest-side, rgb(var(--gold-rgb) / 0.16), transparent 74%),
     radial-gradient(closest-side, rgba(150, 150, 166, 0.62),
                     rgba(150, 150, 166, 0.30) 56%, transparent 84%);
   filter: blur(24px);

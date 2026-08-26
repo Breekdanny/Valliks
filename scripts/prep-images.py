@@ -68,6 +68,11 @@ STUDIO_EDGE = np.array([42, 42, 50], dtype=np.float32)      # #2A2A32
 # الذهبي ديال العلامة — خاصو يطابق --gold ف tokens.css
 GOLD = (212, 166, 42)
 
+# لون كلمة VALLIKS ف اللوغو. ف الملف الأصلي بيضا — الطلب أنها تكون ذهبية.
+# دابا نفس أصفر الشعار (#ffc727) باش اللوغو يبقى بلونين ماشي تلاتة.
+# إلا بغيتيها بذهب الموقع الهادئ، بدلها لـGOLD.
+WORD_COLOR = (255, 199, 39)
+
 WIDTHS = [1080, 720, 480]
 # الرسمة كتبان أصغر من التيشيرت (بطاقة ف المعرض + طبعة ف المعاينة)، فماكاينش
 # داعي لـ1080. أكبر استعمال هو المعاينة على canvas ~900px.
@@ -404,7 +409,11 @@ def process_products():
     manifest = {}
     # JPG (الموكابات الفوتوغرافية) + PNG (الفيكتور الجداد). بلا زيادة PNG
     # الصور الجديدة كيتقفزو ف صمت و`shot()` ف products.js كترمي خطأ.
-    for src in sorted([*RAW.glob("*.jpg"), *RAW.glob("*.png")]):
+    # صور القدّام (`-front`) محفوظة ف raw/ للمعرض من بعد، ولكن ماكيتعالجوش
+    # دابا: الموقع كيعرض غير اللور، وكل صورة معالجة كتزيد ~350KB ف dist/.
+    sources = [p for p in sorted([*RAW.glob("*.jpg"), *RAW.glob("*.png")])
+               if not p.stem.endswith("-front")]
+    for src in sources:
         stem = src.stem
         img = Image.open(src)
         alpha = load_alpha(img)
@@ -447,6 +456,61 @@ def process_products():
         json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     return manifest
+
+
+def check_blank_geometry():
+    """
+    كيتحقق أن كل الموكابات الخاوية عندهم نفس هندسة الجذع.
+
+    علاش هادشي مهم: PRINT ف src/data/designs.js (centerX · torsoWidth ·
+    torsoLeft · torsoRight · shirtTop) هي **نسب مقيسة من موكاب خاوي**.
+    المعاينة كتحسب بلاصة الطبعة وحجمها بالسنتيمتر من هاد الأرقام. إلا كان
+    شي موكاب جديد مؤطر بشكل مختلف، الطبعة غادي تتحط ف بلاصة غالطة **على
+    ذاك اللون وحدو** — والزبون غادي يطلب حاجة ماشي هي اللي شاف.
+
+    normalize_framing() كيوحّد الحجم، ولكن شكل التيشيرت نفسو (عرض الجذع
+    نسبة للكتاف) كيتبدل من موكاب لموكاب. هاد الفحص كيبين الفرق.
+    """
+    rows = []
+    for p in sorted(OUT.glob("blank-*-cut-1080.webp")):
+        key = p.stem.replace("blank-", "").replace("-cut-1080", "")
+        a = np.asarray(Image.open(p).convert("RGBA"))[..., 3]
+        h, w = a.shape
+        m = a > 40
+        ys = np.where(m.any(axis=1))[0]
+        # الجذع: تحت الأكمام — كنقيسو ف شريط عند 70% من علو التيشيرت
+        top = ys[0]
+        band = m[int(top + (ys[-1] - top) * 0.70)]
+        xs = np.where(band)[0]
+        rows.append({
+            "key": key,
+            "shirtTop": top / h,
+            "torsoLeft": xs[0] / w,
+            "torsoRight": xs[-1] / w,
+            "centerX": (xs[0] + xs[-1]) / 2 / w,
+            "torsoWidth": (xs[-1] - xs[0]) / w,
+        })
+
+    if not rows:
+        return
+    print("\nهندسة الموكابات الخاوية (نسب من الإطار):")
+    keys = ["centerX", "torsoWidth", "torsoLeft", "torsoRight", "shirtTop"]
+    print(f"  {'':8s}" + "".join(f"{k:>12s}" for k in keys))
+    for r in rows:
+        print(f"  {r['key']:8s}" + "".join(f"{r[k]:12.3f}" for k in keys))
+
+    worst = max((max(r[k] for r in rows) - min(r[k] for r in rows), k) for k in keys)
+    spread, field = worst
+    print(f"\n  أكبر تشتت: {field} = {spread:.3f}", end="  ")
+    if spread <= 0.01:
+        print("✓ كلهم متفقين — PRINT ف designs.js صالح للجميع")
+    else:
+        print("⚠ فوق التسامح 0.01")
+        avg = {k: sum(r[k] for r in rows) / len(rows) for k in keys}
+        print("  المعاينة غادي تكون غالطة على شي ألوان. إما تعاود تأطير")
+        print("  الموكاب الشاذ، ولا تحدّث PRINT ف src/data/designs.js بهادو:")
+        for k in keys:
+            print(f"      {k}: {avg[k]:.3f},")
 
 
 def process_designs():
@@ -495,92 +559,137 @@ def process_designs():
     return manifest
 
 
+def logo_alpha(arr):
+    """
+    كنحيدو الخلفية ونرجعو ألوان حقيقية.
+
+    اللوغو مرسوم على خلفية شبه سودا (#050606) — يعني كل بيكسل ف الحافة هو
+    أصلاً `اللون × alpha` (حيت الخلفية ≈ صفر). هادي بالضبط صيغة الـpremultiplied
+    alpha، فالاسترجاع هو قسمة على alpha.
+
+    ⚠ علاش max(R,G,B) وماشي اللومينانس: اللومينانس ديال الأصفر #ffc727 هو 197
+    ماشي 255، فلو استعملناه الأصفر كامل كيولي 77% شفاف — الشعار كيبان باهت
+    والأبيض قوي حداه. أما أكبر قناة فهي 255 ف الجوج (أبيض وأصفر)، فكتعطي
+    alpha = 1 للاثنين وكتنزل لصفر غير ف الخلفية.
+    """
+    bg = float(arr.reshape(-1, 3).max(axis=1).min())          # ≈ 6
+    a = np.clip((arr.max(axis=2) - bg) / (255.0 - bg), 0.0, 1.0)
+
+    # un-premultiply: تحت عتبة رقيقة القسمة كتضخم الضجيج، فكنخليو اللون كما هو
+    safe = np.maximum(a, 1.0 / 255.0)[..., None]
+    rgb = np.where(a[..., None] > 0.02, np.clip(arr / safe, 0, 255), arr)
+    return np.dstack([rgb.astype(np.uint8), (a * 255).astype(np.uint8)])
+
+
+def row_bands(alpha, gap=8):
+    """حدود الكتل العمودية: كل مجموعة أسطر فيها حبر، مفصولة بأسطر خاوية."""
+    rows = (alpha > 24).sum(axis=1)
+    bands, run, blank = [], None, 0
+    for y, v in enumerate(rows):
+        if v:
+            if run is None:
+                run = y
+            blank = 0
+        elif run is not None:
+            blank += 1
+            if blank >= gap:
+                bands.append((run, y - blank))
+                run = None
+    if run is not None:
+        bands.append((run, len(rows) - 1))
+    return bands
+
+
 def process_logo():
     """
-    تسطيح اللوغو: كناخدو غير الشكل (الأجزاء الذهبية) وكنعمروه بلون واحد مسطح.
-    الأجزاء الكحلة اللي داخل الـV كتولي شفافة — وهادشي هو اللي كيحافظ على تشابك
-    الحرف مع الشريط. النتيجة: نفس الهوية، بلا bevel ولا لمعان ولا ظلال 3D.
+    اللوغو (نسخة غشت 2026) — lockup فيه 3 كتل فوق بعضياتها:
+        0. الشعار V   (أبيض + أصفر)
+        1. VALLIKS    (أبيض)
+        2. wear your mind (أصفر)
+
+    الفرق الجوهري على النسخة القديمة: هاديك كانت لون واحد مع وهج، فكان
+    خاصها threshold وإعادة تلوين. هادي **مسطحة وملونة** — أي إعادة تلوين
+    كتهرسها (الـV نصو أبيض ونصو أصفر). إذن كنحتافظو بالألوان كما هي
+    وكنحيدو غير الخلفية.
+
+    الأسود اللي داخل الـV كيولي شفاف — وهادشي مقصود: على خلفية الموقع
+    الداكنة كيبان بحال الأصلي بالضبط.
     """
-    src = BRAND_RAW / "logo-raw.png"
-    img = Image.open(src).convert("RGB")
+    img = Image.open(BRAND_RAW / "logo-raw.png").convert("RGB")
     arr = np.asarray(img).astype(np.float32)
-    lum = luminance(arr)
+    rgba = logo_alpha(arr)
 
-    # اللوغو الأصلي عندو وهج (glow) ذهبي خفيف حوالين الشكل. الوهج كياخد المجال
-    # 20→70 ديال اللومينانس، والذهب الحقيقي فوق 90 (قياس على الهيستوغرام).
-    # منحدر 78→118 كيرمي الوهج كامل وكيخلي غير الشكل، بحواف مصقولة.
-    alpha = np.clip((lum - 78.0) / (118.0 - 78.0), 0.0, 1.0)
-
-    def flat(color):
-        rgb = np.zeros_like(arr)
-        rgb[..., 0], rgb[..., 1], rgb[..., 2] = color
-        return Image.fromarray(
-            np.dstack([rgb.astype(np.uint8), (alpha * 255).astype(np.uint8)]), "RGBA"
+    bands = row_bands(rgba[..., 3])
+    if len(bands) != 3:
+        raise RuntimeError(
+            f"كنتسناو 3 كتل (شعار · كلمة · tagline)، لقينا {len(bands)}. "
+            "واش تبدل اللوغو؟ شوف row_bands()."
         )
 
-    gold = flat(GOLD)
-    white = flat((255, 255, 255))
+    # الكلمة بيضا ف الملف الأصلي — كنعاودو نلونوها ذهبية.
+    # كنمسو غير RGB وكنخليو alpha كما هي، إذن الحواف الناعمة كتبقى ناعمة
+    # وماكاينش درج مسنن.
+    wy0, wy1 = bands[1]
+    rgba[wy0:wy1 + 1, :, 0:3] = WORD_COLOR
 
-    # قص الهوامش الفارغة
-    box = gold.getbbox()
-    gold, white = gold.crop(box), white.crop(box)
-    a = np.asarray(gold)[..., 3]
+    full = Image.fromarray(rgba, "RGBA")
 
-    # PNG وسيطة للشغل (تحرير، طباعة، ستيكرات) — ماشي للنشر، إذن ف raw/brand/.
-    # اللي كيتنشر فعلاً هو غير .webp + favicon.png تحت ف public/brand/.
-    gold.save(BRAND_RAW / "logo-gold.png")
-    white.save(BRAND_RAW / "logo-white.png")
+    def piece(y0, y1):
+        c = full.crop((0, y0, full.width, y1 + 1))
+        return c.crop(c.getbbox())
 
-    # فصل الشعار (V + التاج) على كلمة VALLIKS.
-    # الحرف V كينزل بزاف وكيقرب من الكلمة، إذن ماكاينش سطر فارغ 100%. عوض ما
-    # نقلبو على فراغ تام، كناخدو أقل سطر كثافة ف النطاق 55%→78% من الطول —
-    # وهو حتماً السطر اللي بين رأس الـV والكلمة.
-    rows = a.sum(axis=1).astype(np.float64)
-    lo, hi = int(len(rows) * 0.55), int(len(rows) * 0.78)
-    split = lo + int(np.argmin(rows[lo:hi]))
+    mark = piece(*bands[0])
+    word = piece(*bands[1])
+    tag = piece(*bands[2])
 
-    mark = gold.crop((0, 0, gold.width, split))
-    mark = mark.crop(mark.getbbox())
-    mark.save(BRAND_RAW / "logo-mark.png")
+    # الفوتر كيعرض 52px علو. الـlockup كامل مربع تقريباً، إذن الـtagline كيجي
+    # ~4px = غير مقروء. لهادشي logo-full = الشعار + الكلمة بلا tagline.
+    lock = full.crop((0, bands[0][0], full.width, bands[1][1] + 1))
+    lock = lock.crop(lock.getbbox())
 
-    # الكلمة بوحدها — كتستعمل ف الهيدر حدا الشعار، وف نسخة بيضا للأسطح الفاتحة.
-    # ملاحظة: خاصنا نحتافظو بالنسخة الذهبية ف متغير خاص بها، حيت هي اللي
-    # كتمشي للهيدر. (باگ سابق: المتغير كان كيبقى حامل آخر نسخة = البيضا.)
-    def cut_word(img):
-        w = img.crop((0, split, img.width, img.height))
-        return w.crop(w.getbbox())
+    for im, name in ((mark, "logo-mark"), (word, "logo-word"),
+                     (tag, "logo-tag"), (lock, "logo-full")):
+        im.save(BRAND_RAW / f"{name}.png")
 
-    word = cut_word(gold)
-    word.save(BRAND_RAW / "logo-word.png")
-    cut_word(white).save(BRAND_RAW / "logo-word-white.png")
-    print(f"  word: {word.width}x{word.height}")
+    # ---- favicon ----
+    # الملف اللي جا مع اللوغو (favicon-supplied.png) أجزاؤه السودا **معتمة**،
+    # يعني مرسوم لخلفية بيضا. ف تبويب داكن هاديك الأجزاء كتختافى وكيبقى غير
+    # الأصفر مكسّر. لهادشي كنخبزو الخلفية الداكنة ف مربع: كيخدم ف أي تبويب،
+    # فاتح ولا داكن.
+    def on_dark(im, pad=0.12, out=180):
+        side = round(max(im.width, im.height) * (1 + pad * 2))
+        c = Image.new("RGBA", (side, side), (5, 6, 6, 255))
+        c.paste(im, ((side - im.width) // 2, (side - im.height) // 2), im)
+        return c.resize((out, out), Image.LANCZOS)
 
-    # favicon مربع: كنركزو الشعار ف مربع شفاف باش مايتشوهش
-    side = max(mark.width, mark.height)
-    square = Image.new("RGBA", (side, side), (0, 0, 0, 0))
-    square.paste(mark, ((side - mark.width) // 2, (side - mark.height) // 2), mark)
-    square.resize((180, 180), Image.LANCZOS).save(BRAND / "favicon.png")
+    # تبويب المتصفح = 16px. على هاد الحجم الكلمة والـtagline كيوليو لطخة —
+    # قسناها: "VALLIKS" كتجي أقل من 2px علو. إذن التبويب كياخد الشعار وحدو.
+    on_dark(mark).save(BRAND / "favicon.png")
 
-    # نسخ WebP بالقياس اللي كيتعرض بيه فعلاً (×3 للشاشات عالية الكثافة).
-    # PNG بـ787px باش يتعرض ف 34px = 94KB مضيعين على والو. WebP ف القياس
-    # الصحيح كينزل لأقل من 10KB — وهادي 4G مغربي، كل كيلوبايت كيتحسب.
-    for src_img, name, target_h in (
-        (mark, "logo-mark", 110),      # الهيدر: 34px × 3
-        (word, "logo-word", 50),       # الهيدر: 15px × 3
-        (gold, "logo-full", 160),      # الفوتر: 52px × 3
-    ):
-        w = round(src_img.width * target_h / src_img.height)
-        src_img.resize((w, target_h), Image.LANCZOS).save(
+    # أيقونة الشاشة الرئيسية ديال iOS كتبان ف 180px — تما الـlockup كامل
+    # مقروء بصح. هنا كيتعرض الاسم والـtagline كما بغيتي.
+    on_dark(full.crop(full.getbbox()), pad=0.06).save(BRAND / "apple-touch-icon.png")
+
+    # ---- نسخ WebP بالقياس اللي كيتعرض بيه فعلاً (×3 لشاشات عالية الكثافة) ----
+    out = {}
+    for im, name, target_h in ((mark, "logo-mark", 102),   # الهيدر: 34px × 3
+                               (word, "logo-word", 45),    # الهيدر: 15px × 3
+                               (lock, "logo-full", 156)):  # الفوتر: 52px × 3
+        w = round(im.width * target_h / im.height)
+        im.resize((w, target_h), Image.LANCZOS).save(
             BRAND / f"{name}.webp", "WEBP", quality=90, method=6
         )
+        out[name] = (w, target_h)
 
-    density = rows[split] / (a.shape[1] * 255)
-    print(f"  logo: {box[2]-box[0]}x{box[3]-box[1]} بعد القص")
-    print(f"  logo: الشعار انفصل ف y={split} (كثافة {density:.3%})")
-    print(f"  mark: {mark.width}x{mark.height}")
-    for n in ("logo-mark", "logo-word", "logo-full"):
-        print(f"  {n}.webp: {(BRAND / (n + '.webp')).stat().st_size / 1024:.1f} KB")
-
+    for i, (y0, y1) in enumerate(bands):
+        print(f"  كتلة {i}: y {y0}→{y1}")
+    print(f"  الشعار  {mark.width}×{mark.height}")
+    print(f"  الكلمة  {word.width}×{word.height}")
+    print(f"  tagline {tag.width}×{tag.height}")
+    print(f"  lockup  {lock.width}×{lock.height}")
+    for n, (w, h) in out.items():
+        kb = (BRAND / f"{n}.webp").stat().st_size / 1024
+        print(f"  {n}.webp: {w}×{h}  {kb:.1f} KB   ← width=\"{w}\" height=\"{h}\"")
 
 if __name__ == "__main__":
     import sys
@@ -598,6 +707,7 @@ if __name__ == "__main__":
     if only in ("all", "products"):
         print("المنتوجات:")
         process_products()
+        check_blank_geometry()
     if only in ("all", "designs"):
         print("الرسمات:")
         process_designs()

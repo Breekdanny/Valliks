@@ -30,6 +30,7 @@ export function createCustomSection({ onOrder }) {
     canvas: document.getElementById('customCanvas'),
     warn: document.getElementById('customWarn'),
     shirt: document.getElementById('customShirt'),
+    fShirt: document.getElementById('fCustomShirt'),
     size: document.getElementById('customSize'),
     designs: document.getElementById('customDesigns'),
     file: document.getElementById('customFile'),
@@ -243,6 +244,8 @@ export function createCustomSection({ onOrder }) {
   /* ---------- الرسم ديال الأزرار ---------- */
 
   function paintShirt() {
+    // لون واحد → ماكاينش شي حاجة تختار. نفس السلوك ديال نافذة الطلب.
+    el.fShirt.hidden = CUSTOM.variants.length < 2;
     el.shirt.innerHTML = CUSTOM.variants
       .map(
         (v, i) => `

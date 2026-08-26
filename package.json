@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "images": "python scripts/prep-images.py",
     "designs": "python scripts/prep-images.py designs",
+    "mockups": "python scripts/split-mockups.py",
+    "designs:extract": "python scripts/extract-designs.py",
     "fonts": "node scripts/fetch-fonts.mjs"
   },
   "devDependencies": {

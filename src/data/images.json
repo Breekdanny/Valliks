@@ -14,6 +14,51 @@
     "width": 1080,
     "height": 1080
   },
+  "blank-grey": {
+    "solid": {
+      "1080": "/products/blank-grey-solid-1080.webp",
+      "720": "/products/blank-grey-solid-720.webp",
+      "480": "/products/blank-grey-solid-480.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-grey-cut-1080.webp",
+      "720": "/products/blank-grey-cut-720.webp",
+      "480": "/products/blank-grey-cut-480.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAAAwBACdASoYABgAPu1au12po6amlAEwHYlnAMiYVlBpfaB+Vm7rDOMUyAAA/uzVWqjxKv+h3V1U3gL3jO7JY6QPsAA=",
+    "width": 2200,
+    "height": 2200
+  },
+  "blank-ink": {
+    "solid": {
+      "1080": "/products/blank-ink-solid-1080.webp",
+      "720": "/products/blank-ink-solid-720.webp",
+      "480": "/products/blank-ink-solid-480.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-ink-cut-1080.webp",
+      "720": "/products/blank-ink-cut-720.webp",
+      "480": "/products/blank-ink-cut-480.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQBACdASoYABgAPt1apU2opSOiN/qoARAbiWYAyJgh38dANWTBz8oMZdq6+VBDgAD+5d5jo9y6AdQuG2G/Qb1DJVzEBam6mFdVQtp8fyUYzY5q2+ZtirHEZUmZpPgAAAA=",
+    "width": 2200,
+    "height": 2200
+  },
+  "blank-sage": {
+    "solid": {
+      "1080": "/products/blank-sage-solid-1080.webp",
+      "720": "/products/blank-sage-solid-720.webp",
+      "480": "/products/blank-sage-solid-480.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-sage-cut-1080.webp",
+      "720": "/products/blank-sage-cut-720.webp",
+      "480": "/products/blank-sage-cut-480.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAABwBACdASoYABgAPtFWo02oJKMiN+gBABoJYwC/7DJPwuVjE0GnW7j9uMjjAAD+5eSSbkasU3JmBi1tNl06BPWiQg81JvocOZVnJYLi4uAAAA==",
+    "width": 2200,
+    "height": 2200
+  },
   "blank-white": {
     "solid": {
       "1080": "/products/blank-white-solid-1080.webp",
@@ -44,36 +89,6 @@
     "width": 1080,
     "height": 1080
   },
-  "high-roller-green": {
-    "solid": {
-      "1080": "/products/high-roller-green-solid-1080.webp",
-      "720": "/products/high-roller-green-solid-720.webp",
-      "480": "/products/high-roller-green-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/high-roller-green-cut-1080.webp",
-      "720": "/products/high-roller-green-cut-720.webp",
-      "480": "/products/high-roller-green-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAACQBACdASoYABgAPu1mqk2ppaQiMAgBMB2JQBZ2XkBp1CwgpK3fcohPmPBhMAAA/tzDMZLwtOUKKfcdRCpitejmRP3lhJJpunRV1bbLRX+McarbYRdicSgA",
-    "width": 2251,
-    "height": 2251
-  },
-  "high-roller-navy": {
-    "solid": {
-      "1080": "/products/high-roller-navy-solid-1080.webp",
-      "720": "/products/high-roller-navy-solid-720.webp",
-      "480": "/products/high-roller-navy-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/high-roller-navy-cut-1080.webp",
-      "720": "/products/high-roller-navy-cut-720.webp",
-      "480": "/products/high-roller-navy-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAQBQCdASoYABgAPulep02pJSOiN/VYASAdCWIAtOgQ73eNhc47Ol5FQuJjPqD75LgAAP7cxbnop9s7CNvHzPRDYR45Ga5QnC+6oiNfJ0sKpJmcjCDKu/hpaHpZ9kaJCpTkXOyUKIgmW+IDsAA=",
-    "width": 2251,
-    "height": 2251
-  },
   "outlaw-black": {
     "solid": {
       "1080": "/products/outlaw-black-solid-1080.webp",
@@ -89,21 +104,6 @@
     "width": 1080,
     "height": 1080
   },
-  "outlaw-navy": {
-    "solid": {
-      "1080": "/products/outlaw-navy-solid-1080.webp",
-      "720": "/products/outlaw-navy-solid-720.webp",
-      "480": "/products/outlaw-navy-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/outlaw-navy-cut-1080.webp",
-      "720": "/products/outlaw-navy-cut-720.webp",
-      "480": "/products/outlaw-navy-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAACwBACdASoYABgAPu1kq04ppaQiKA1RMB2JZgC06BEcx1opoTq1pDB51XKoMFAAAP7cwxKtL5RTq5TKRx4hsPtZ4RuQCsvMzAPfxdHesmBgm3mJNspX/xNdhe9FUeksodr8xhghz7AAAA==",
-    "width": 2251,
-    "height": 2251
-  },
   "speed-demon-black": {
     "solid": {
       "1080": "/products/speed-demon-black-solid-1080.webp",
@@ -118,51 +118,6 @@
     "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADwBACdASoYABgAPuFcpk2opSOiMAwBEBwJYwDN/CHf3ODNs40oxip6E0axgN/ewOgA/uXeY8p3cb3ZPWsiVP40vTpc0MGqdUmvvua4UzL3P/tTIrRAfKF34W8Sh9vAAAA=",
     "width": 1080,
     "height": 1080
-  },
-  "speed-demon-green": {
-    "solid": {
-      "1080": "/products/speed-demon-green-solid-1080.webp",
-      "720": "/products/speed-demon-green-solid-720.webp",
-      "480": "/products/speed-demon-green-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/speed-demon-green-cut-1080.webp",
-      "720": "/products/speed-demon-green-cut-720.webp",
-      "480": "/products/speed-demon-green-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAACQBACdASoYABgAPt1ap02opSOiN/qoARAbiUAYUAQ77GktJEEEA3E7Ei2D2AAA/uXenEFZDnY+10P7YIhoN867Ew7GYbktIZHAbrGi3IU4QLDtKMZ5rfAb4hgAAA==",
-    "width": 2251,
-    "height": 2251
-  },
-  "speed-demon-mint": {
-    "solid": {
-      "1080": "/products/speed-demon-mint-solid-1080.webp",
-      "720": "/products/speed-demon-mint-solid-720.webp",
-      "480": "/products/speed-demon-mint-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/speed-demon-mint-cut-1080.webp",
-      "720": "/products/speed-demon-mint-cut-720.webp",
-      "480": "/products/speed-demon-mint-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAAAwBQCdASoYABgAPu1srVGppaQiqAqpMB2JQBadAiOaUpVymcnL0Y0vzvmo9TBKOwUZAAD+3MO46jJ3ZHYDfeRJnh6F1ZS2cPn0q7xmgyKDbKBle7RRwvKlJGq8G81xyDsmOoBB9CyYLFU9ElCEqpInMbAAAA==",
-    "width": 2251,
-    "height": 2251
-  },
-  "speed-demon-navy": {
-    "solid": {
-      "1080": "/products/speed-demon-navy-solid-1080.webp",
-      "720": "/products/speed-demon-navy-solid-720.webp",
-      "480": "/products/speed-demon-navy-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/speed-demon-navy-cut-1080.webp",
-      "720": "/products/speed-demon-navy-cut-720.webp",
-      "480": "/products/speed-demon-navy-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAADQBACdASoYABgAPu1eqE4ppKOiMBgMATAdiUAWHYId/Dp28ugr+HBzKfD0DaqBgAD+3MMSrS+W5ELikDuvIGto5yKD8lvlmhmmCt64l6yuV4egW/kqfAq3s3yFl50jqOCbKbeFVL3MY5wvbaAAAA==",
-    "width": 2251,
-    "height": 2251
   },
   "speed-demon-white": {
     "solid": {
@@ -193,66 +148,6 @@
     "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAADQBACdASoYABgAPu1qrU6ppiSiMAgBMB2JQBmaBDv46Ae7qLb81nzD8I+6QMeTAAD+3Mgmccs2xW7factb+H6Bb1tc6mBguNPLz1gZLLqvPk1I8quODp6Ecdnp/CalDuQAAA==",
     "width": 1080,
     "height": 1080
-  },
-  "total-strike-green": {
-    "solid": {
-      "1080": "/products/total-strike-green-solid-1080.webp",
-      "720": "/products/total-strike-green-solid-720.webp",
-      "480": "/products/total-strike-green-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/total-strike-green-cut-1080.webp",
-      "720": "/products/total-strike-green-cut-720.webp",
-      "480": "/products/total-strike-green-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQBQCdASoYABgAPu1orU2ppqSiMBgIATAdiUAWo3HZSNR/Rau/pyQDfRsMHrQnRgAAAP74k4ikUio+At1ZdWBY8of+0fFPGURgJF60/o0HA7AaERYQL5+VbSOLC/aOMi4iRgAA",
-    "width": 2251,
-    "height": 2251
-  },
-  "total-strike-mint": {
-    "solid": {
-      "1080": "/products/total-strike-mint-solid-1080.webp",
-      "720": "/products/total-strike-mint-solid-720.webp",
-      "480": "/products/total-strike-mint-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/total-strike-mint-cut-1080.webp",
-      "720": "/products/total-strike-mint-cut-720.webp",
-      "480": "/products/total-strike-mint-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAAAQBQCdASoYABgAPu1urU6ppySiMAgBMB2JQBZwBDv59w3bBlVNx1PTHNbMn66V9rAAAP7cw7jqMndkdCRGjISqxKmtA0q8pkWbswAVDU6BHunJtr6yy53v3/izLgXWHvcaHwEee+WWKeYOiheyopFQkgwDoAAA",
-    "width": 2251,
-    "height": 2251
-  },
-  "total-strike-navy": {
-    "solid": {
-      "1080": "/products/total-strike-navy-solid-1080.webp",
-      "720": "/products/total-strike-navy-solid-720.webp",
-      "480": "/products/total-strike-navy-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/total-strike-navy-cut-1080.webp",
-      "720": "/products/total-strike-navy-cut-720.webp",
-      "480": "/products/total-strike-navy-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAACQBACdASoYABgAPuliqk2pJaQiMBgMASAdCUAW2QId8V8xVIw8RwqK+ulqoAAA/tzFueNOaPOw334h+kvGS0f5+4HCswm0GHpEJqJEajn8oMS5p2I/68TiKtkaqMVTKnMxoQ+W8K1KJ5Uo1PZAAA==",
-    "width": 2251,
-    "height": 2251
-  },
-  "total-strike-pink": {
-    "solid": {
-      "1080": "/products/total-strike-pink-solid-1080.webp",
-      "720": "/products/total-strike-pink-solid-720.webp",
-      "480": "/products/total-strike-pink-solid-480.webp"
-    },
-    "cut": {
-      "1080": "/products/total-strike-pink-cut-1080.webp",
-      "720": "/products/total-strike-pink-cut-720.webp",
-      "480": "/products/total-strike-pink-cut-480.webp"
-    },
-    "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAAAQBQCdASoYABgAPu1wqlGppiOiqAqpMB2JZAC3uBEc0pRk07gW95K8b2T0zAmZdZawAP7cw7jqNGCkFPklvu6IAeS3sjRIsOd+6bLBE5qRNK22qpkYeR/9pyMu9E/Nr7A2aezkiGS0YtJHm9ORxlyfoxwAAA==",
-    "width": 2251,
-    "height": 2251
   },
   "total-strike-white": {
     "solid": {

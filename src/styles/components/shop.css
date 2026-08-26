@@ -46,9 +46,9 @@
   background: linear-gradient(
     115deg,
     transparent 38%,
-    rgba(212, 166, 42, 0.14) 48%,
+    rgb(var(--gold-rgb) / 0.14) 48%,
     rgba(237, 201, 99, 0.26) 51%,
-    rgba(212, 166, 42, 0.14) 54%,
+    rgb(var(--gold-rgb) / 0.14) 54%,
     transparent 64%
   );
   background-size: 260% 260%;
@@ -180,7 +180,7 @@ html[lang='ar'] .card__tag { text-transform: none; letter-spacing: 0.02em; }
 .swatch:hover { transform: scale(1.14); }
 .swatch[aria-pressed='true'] {
   border-color: var(--gold);
-  box-shadow: 0 0 0 2px rgba(212, 166, 42, 0.22);
+  box-shadow: 0 0 0 2px rgb(var(--gold-rgb) / 0.22);
 }
 
 /* ---------- الهاتف ---------- */

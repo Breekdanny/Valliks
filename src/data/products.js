@@ -88,10 +88,16 @@ function shot(stem) {
    باش النقطة الملونة ف البطاقة تطابق التيشيرت بالضبط. */
 const BLACK = { key: 'black', ar: 'كحل', fr: 'Noir', hex: '#131315' };
 const WHITE = { key: 'white', ar: 'بيض', fr: 'Blanc', hex: '#eeece5' };
-const NAVY = { key: 'navy', ar: 'أزرق كحل', fr: 'Bleu marine', hex: '#003366' };
-const GREEN = { key: 'green', ar: 'أخضر غامق', fr: 'Vert foncé', hex: '#2f5b32' };
-const PINK = { key: 'pink', ar: 'وردي', fr: 'Rose', hex: '#fcc3e2' };
-const MINT = { key: 'mint', ar: 'نعناعي', fr: 'Menthe', hex: '#b7eae6' };
+
+/* ألوان التيشيرت الخاوي (قسم "صمم ديالك"). الهيكس مقيس من وسط الجذع ف
+   كل موكاب — ماشي بالعين.
+
+   ملاحظة على السميات: كانو ثوابت `NAVY` و `GREEN` وتحيدو مع الموكابات
+   الفيكتور. هادو ألوان **مختلفة** جايين من موكابات فوتوغرافية حقيقية
+   (#161258 و #406044 عوض #003366 و #2f5b32)، لهادشي عندهم سميات جداد. */
+const GREY = { key: 'grey', ar: 'رمادي', fr: 'Gris', hex: '#6a6a6a' };
+const INK = { key: 'ink', ar: 'نيلي', fr: 'Indigo', hex: '#161258' };
+const SAGE = { key: 'sage', ar: 'أخضر فاتح', fr: 'Vert', hex: '#406044' };
 
 /* --------------------------------------------------------------------------
    المنتوجات
@@ -102,6 +108,39 @@ const MINT = { key: 'mint', ar: 'نعناعي', fr: 'Menthe', hex: '#b7eae6' };
    الدروب — اسم المجموعة كيبان ف شارة الـhero وف عنوان قسم المنتوجات
    -------------------------------------------------------------------------- */
 export const DROP = { name: 'NOCTURNAL CHAOS', number: 'DROP 01' };
+
+/* --------------------------------------------------------------------------
+   ألوان التيشيرت الخاوي — كتتبنى من الموكابات الموجودة فعلاً.
+
+   أي `blank-<key>` كاين ف images.json وسميتو ف COLOR_BY_KEY كيدخل لقسم
+   "صمم ديالك" وحدو. الترتيب صريح ماشي حسب مفاتيح JSON، باش الكحل يبقى
+   الأول (هو الافتراضي) وترتيب الشيبات مايتبدلش من بناء لآخر.
+   -------------------------------------------------------------------------- */
+const COLOR_BY_KEY = { black: BLACK, white: WHITE, grey: GREY, ink: INK, sage: SAGE };
+const BLANK_ORDER = ['black', 'white', 'grey', 'ink', 'sage'];
+
+/* موكاب خاوي موجود ولكن بلا ثابت لون → خطأ صريح.
+   الفلترة الصامتة كانت غادي تخلي لون تصور وتعالج ولكن ماكيبانش ف الموقع،
+   وماتعرف علاش. */
+for (const key of Object.keys(images)) {
+  if (!key.startsWith('blank-') || key.endsWith('-front')) continue;
+  const k = key.slice(6);
+  if (!COLOR_BY_KEY[k]) {
+    throw new Error(
+      `لقينا ${key} ف images.json ولكن ماكاينش ثابت لون اسمو "${k}".\n` +
+      `زيدو فوق مع الهيكس المقيس من وسط الجذع ديال الموكاب، ` +
+      `وزيد "${k}" ف COLOR_BY_KEY و BLANK_ORDER.`
+    );
+  }
+}
+
+const BLANK_VARIANTS = BLANK_ORDER
+  .filter((k) => images[`blank-${k}`])
+  .map((k) => ({ ...COLOR_BY_KEY[k], ...shot(`blank-${k}`) }));
+
+if (!BLANK_VARIANTS.length) {
+  throw new Error('ماكاين حتى موكاب خاوي — شغّل: npm run mockups && npm run images');
+}
 
 export const PRODUCTS = [
   {
@@ -123,10 +162,6 @@ export const PRODUCTS = [
     variants: [
       { ...BLACK, ...shot('total-strike-black') },
       { ...WHITE, ...shot('total-strike-white') },
-      { ...NAVY, ...shot('total-strike-navy') },
-      { ...GREEN, ...shot('total-strike-green') },
-      { ...PINK, ...shot('total-strike-pink') },
-      { ...MINT, ...shot('total-strike-mint') },
     ],
   },
   {
@@ -142,8 +177,6 @@ export const PRODUCTS = [
     sizes: SIZE_LIST,
     variants: [
       { ...BLACK, ...shot('high-roller-black') },
-      { ...NAVY, ...shot('high-roller-navy') },
-      { ...GREEN, ...shot('high-roller-green') },
     ],
   },
   {
@@ -160,9 +193,6 @@ export const PRODUCTS = [
     variants: [
       { ...BLACK, ...shot('speed-demon-black') },
       { ...WHITE, ...shot('speed-demon-white') },
-      { ...NAVY, ...shot('speed-demon-navy') },
-      { ...GREEN, ...shot('speed-demon-green') },
-      { ...MINT, ...shot('speed-demon-mint') },
     ],
   },
   {
@@ -178,7 +208,6 @@ export const PRODUCTS = [
     sizes: SIZE_LIST,
     variants: [
       { ...BLACK, ...shot('outlaw-black') },
-      { ...NAVY, ...shot('outlaw-navy') },
     ],
   },
   {
@@ -205,8 +234,10 @@ export const PRODUCTS = [
    (`--step: 72deg` ف hero.css)، وشبكة المنتوجات كتعرض المجموعة الجاهزة.
    هاد الكائن كيتستعمل غير باش تتحل نافذة الطلب على طلب مخصص.
 
-   الألوان محدودة ف الكحل والبيض حيت هادو هوما الموكابات الخاوية الوحيدة
-   اللي عندنا. باش تزيد لون، خاصك موكاب خاوي جديد ف raw/products/.
+   الألوان **كتتولد أوتوماتيكياً** من الموكابات الخاوية اللي كاينين ف
+   images.json. باش تزيد لون: حط الموكاب ف raw/incoming/، شغّل
+   `npm run mockups` ومن بعد `npm run images`. اللون كيبان بوحدو — بلا
+   ما تمس هاد الملف، غير إلا كان لون جديد بالكامل فخاصو ثابت فوق.
 
    TODO: 189 هو نفس ثمن المطبوعين الجاهزين. إلا كانت الطباعة المخصصة
          (وحدة بوحدة، بلا كمية) كتكلفك أكثر، رفع هاد الرقم.
@@ -221,10 +252,7 @@ export const CUSTOM = {
     fr: "Le même coton lourd et la même coupe oversize, avec le design que vous avez choisi — dans notre galerie ou le vôtre.",
   },
   sizes: SIZE_LIST,
-  variants: [
-    { ...BLACK, ...shot('blank-black') },
-    { ...WHITE, ...shot('blank-white') },
-  ],
+  variants: BLANK_VARIANTS,
 };
 
 export const byId = (id) =>

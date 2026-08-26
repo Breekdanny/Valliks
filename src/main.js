@@ -110,6 +110,17 @@ function paintLinks() {
 
   const socials = $('socials');
   socials.innerHTML = '';
+
+  /* تدرج إنستغرام الرسمي. الأيقونة كتاخدو بـfill="url(#igGrad)" عوض
+     currentColor — CSS ماكيقدرش يحط تدرج على مسار SVG، خاص يكون جوا الملف.
+     المعرّف كيتعاود مع كل نداء، ولكن socials.innerHTML='' فوق كيمسح القديم
+     أولاً، فماكاينش خطر تكرار id. */
+  const IG_GRAD = `<defs><linearGradient id="igGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#f9ce34"/>
+      <stop offset=".5" stop-color="#ee2a7b"/>
+      <stop offset="1" stop-color="#6228d7"/>
+    </linearGradient></defs>`;
+
   const nets = [
     ['instagram', SHOP.instagram,
       'M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.2a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2zm0 10.9a4.3 4.3 0 1 1 0-8.6 4.3 4.3 0 0 1 0 8.6zm8.4-11.2a1.5 1.5 0 1 1-3.1 0 1.5 1.5 0 0 1 3.1 0z'],
@@ -119,13 +130,16 @@ function paintLinks() {
 
   nets.forEach(([name, href, path]) => {
     if (!href) return;                 // ماكاينش الرابط → ماكايناش الأيقونة
+    const ig = name === 'instagram';
     const a = document.createElement('a');
-    a.className = 'icon-btn';
+    a.className = `icon-btn icon-btn--brand icon-btn--${ig ? 'ig' : name}`;
     a.href = href;
     a.target = '_blank';
     a.rel = 'noopener';
     a.setAttribute('aria-label', name);
-    a.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${path}"/></svg>`;
+    a.innerHTML =
+      `<svg viewBox="0 0 24 24" aria-hidden="true">${ig ? IG_GRAD : ''}` +
+      `<path fill="${ig ? 'url(#igGrad)' : 'currentColor'}" d="${path}"/></svg>`;
     socials.append(a);
   });
 }

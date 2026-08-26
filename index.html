@@ -8,8 +8,10 @@
   <title>VALLIKS — تيشيرتات أوفرسايز مطبوعة بالمغرب</title>
   <meta name="description" content="تيشيرتات أوفرسايز بديزاينات أصلية، مطبوعة بالمغرب. الدفع عند الاستلام، التوصيل من 24 إلى 48 ساعة." />
 
+  <!-- تبويب المتصفح = 16px: الشعار وحدو (الكلمة ماكتقراش ف هاد الحجم) -->
   <link rel="icon" type="image/png" href="/brand/favicon.png" />
-  <link rel="apple-touch-icon" href="/brand/favicon.png" />
+  <!-- شاشة iOS الرئيسية = 180px: تما الـlockup كامل مقروء -->
+  <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
 
   <!-- الخطوط self-hosted: preload للوزنين اللي كيبانو ف أول شاشة فقط -->
   <link rel="preload" href="/fonts/tajawal-900-arabic.woff2" as="font" type="font/woff2" crossorigin />
@@ -38,8 +40,8 @@
   <header class="header" id="header">
     <div class="shell header__in">
       <a class="brand" href="#top" aria-label="VALLIKS">
-        <img class="brand__mark" src="/brand/logo-mark.webp" alt="" width="128" height="110" />
-        <img class="brand__word" src="/brand/logo-word.webp" alt="VALLIKS" width="192" height="50" />
+        <img class="brand__mark" src="/brand/logo-mark.webp" alt="" width="110" height="102" />
+        <img class="brand__word" src="/brand/logo-word.webp" alt="VALLIKS" width="253" height="45" />
       </a>
 
       <nav class="nav" aria-label="التنقل">
@@ -53,7 +55,7 @@
       <div class="header__tools">
         <button class="icon-btn lang-btn" id="langBtn" data-i18n="nav.lang"
                 data-i18n-aria="nav.langLabel" aria-label="بدل للفرنسية">FR</button>
-        <a class="icon-btn" id="waHeader" href="#" target="_blank" rel="noopener"
+        <a class="icon-btn icon-btn--brand icon-btn--wa" id="waHeader" href="#" target="_blank" rel="noopener"
            data-i18n-aria="footer.wa" aria-label="واتساب">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.7-.9-2.9-1.6-4-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.8.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.2-.3-.3-.6-.5z"/>
@@ -160,7 +162,7 @@
               <input id="customFile" type="file" accept="image/png,image/jpeg,image/webp" hidden />
             </div>
 
-            <div class="field">
+            <div class="field" id="fCustomShirt">
               <label data-i18n="custom.shirt">التيشيرت</label>
               <div class="chips" id="customShirt"></div>
             </div>
@@ -357,7 +359,7 @@
     <div class="shell">
       <div class="footer__grid">
         <div class="footer__brand">
-          <img src="/brand/logo-full.webp" alt="VALLIKS" width="175" height="160" loading="lazy" />
+          <img src="/brand/logo-full.webp" alt="VALLIKS" width="175" height="156" loading="lazy" />
           <p data-i18n="footer.tag">مصمم ومطبوع بالمغرب</p>
           <div class="socials" id="socials"></div>
         </div>

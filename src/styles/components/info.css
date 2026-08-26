@@ -35,7 +35,7 @@
   border-block-end: 1px solid var(--line-soft);
 }
 .size-table thead th {
-  background: rgba(212, 166, 42, 0.08);
+  background: rgb(var(--gold-rgb) / 0.08);
   color: var(--gold);
   font-size: var(--t-xs);
   letter-spacing: 0.1em;
@@ -65,7 +65,7 @@ html[lang='ar'] .size-table thead th { text-transform: none; letter-spacing: 0; 
   padding: 1rem 1.15rem;
   margin-block-start: 1.25rem;
   border-inline-start: 2px solid var(--gold);
-  background: rgba(212, 166, 42, 0.05);
+  background: rgb(var(--gold-rgb) / 0.05);
   color: var(--text-dim);
   font-size: var(--t-sm);
 }
