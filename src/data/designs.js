@@ -27,32 +27,70 @@ function art(stem) {
   };
 }
 
+/* --------------------------------------------------------------------------
+   الفئات — كل وحدة كتولي قسم مطوي ف المعرض.
+
+   الترتيب هنا هو الترتيب ف الواجهة. أول وحدة فيها ديزاينات كتتحل وحدها،
+   والباقي مسدودين — بلا هادشي الزبون كيلقى حائط ديال 30+ رسمة.
+
+   باش تزيد فئة: زيد كائن هنا، ومن بعد حط `category: '<id>'` ف الرسمات.
+   فئة خاوية ماكتبانش أصلاً — إذن تقدر تزيدها قبل ما تكون عندك الرسمات.
+   -------------------------------------------------------------------------- */
+export const CATEGORIES = [
+  { id: 'streetwear', name: { ar: 'ستريتوير', fr: 'Streetwear' } },
+  { id: 'anime', name: { ar: 'أنيمي', fr: 'Anime' } },
+  { id: 'quotes', name: { ar: 'مقولات', fr: 'Citations' } },
+  { id: 'simple', name: { ar: 'بسيط', fr: 'Minimaliste' } },
+  { id: 'kids', name: { ar: 'دراري', fr: 'Enfants' } },
+];
+
 export const DESIGNS = [
   {
     id: 'total-strike',
+    category: 'streetwear',
     name: { ar: 'TOTAL STRIKE', fr: 'TOTAL STRIKE' },
     tag: { ar: 'بولينغ · كوميك', fr: 'Bowling · Comic' },
     ...art('total-strike'),
   },
   {
     id: 'high-roller',
+    category: 'streetwear',
     name: { ar: 'HIGH ROLLER', fr: 'HIGH ROLLER' },
     tag: { ar: 'كارطة · غرافيتي', fr: 'Cartes · Graffiti' },
     ...art('high-roller'),
   },
   {
     id: 'speed-demon',
+    category: 'streetwear',
     name: { ar: 'SPEED DEMON', fr: 'SPEED DEMON' },
     tag: { ar: 'طوموبيل · سرعة', fr: 'Scooter · Vitesse' },
     ...art('speed-demon'),
   },
   {
     id: 'outlaw',
+    category: 'streetwear',
     name: { ar: 'OUTLAW', fr: 'OUTLAW' },
     tag: { ar: 'ويسترن · فردين', fr: 'Western · Revolvers' },
     ...art('outlaw'),
   },
 ];
+
+/* رسمة بلا فئة معروفة كتضيع ف صمت — الزبون ماكيشوفهاش وماتعرفش علاش.
+   خطأ صريح عند البناء أحسن. */
+const CATEGORY_IDS = new Set(CATEGORIES.map((c) => c.id));
+for (const d of DESIGNS) {
+  if (!CATEGORY_IDS.has(d.category)) {
+    throw new Error(
+      `الرسمة "${d.id}" عندها فئة "${d.category}" ماكايناش ف CATEGORIES. ` +
+      `الفئات المتاحة: ${[...CATEGORY_IDS].join(' · ')}`
+    );
+  }
+}
+
+/** الرسمات مجمّعة حسب الفئة، بترتيب CATEGORIES، بلا الفئات الخاوية. */
+export const DESIGNS_BY_CATEGORY = CATEGORIES
+  .map((c) => ({ ...c, items: DESIGNS.filter((d) => d.category === c.id) }))
+  .filter((c) => c.items.length);
 
 /* --------------------------------------------------------------------------
    هندسة منطقة الطباعة على الموكاب الخاوي.

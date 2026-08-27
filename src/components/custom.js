@@ -12,7 +12,9 @@
    ========================================================================== */
 
 import { CUSTOM, SIZES } from '../data/products.js';
-import { DESIGNS, PRINT, cmPerFrame, maxPrintCm } from '../data/designs.js';
+import {
+  DESIGNS, DESIGNS_BY_CATEGORY, PRINT, cmPerFrame, maxPrintCm,
+} from '../data/designs.js';
 import { loadShirt, scaleArt, render } from '../lib/mockup.js';
 import { pick, t } from '../i18n/index.js';
 
@@ -266,40 +268,74 @@ export function createCustomSection({ onOrder }) {
     ).join('');
   }
 
+  /** فهرس الرسمة ف DESIGNS — الشبكة مجمّعة، فالفهرس ماشي هو ترتيب العرض. */
+  const indexOf = (d) => DESIGNS.indexOf(d);
+
   function paintDesigns() {
-    const cards = DESIGNS.map(
-      (d, i) => `
-      <button class="design" type="button" data-i="${i}"
-              aria-pressed="${source === 'gallery' && i === designIdx}">
-        <span class="design__art">
-          <img src="${d.src}" srcset="${d.srcset}" sizes="140px"
-               alt="" width="${d.width}" height="${d.height}" loading="lazy" />
-        </span>
-        <span class="design__name">${pick(d.name)}</span>
-      </button>`
-    ).join('');
+    // أي فئة كانت محلولة كتبقى محلولة. paintDesigns كيتنادى ملي تتبدل اللغة
+    // ولا اللون، وبلا هادشي كل تبديل كان غادي يسد الأقسام تحت رجلين الزبون.
+    const open = new Set(
+      [...el.designs.querySelectorAll('details[data-cat]')]
+        .filter((x) => x.open)
+        .map((x) => x.dataset.cat)
+    );
+    const activeCat =
+      source === 'gallery' ? DESIGNS[designIdx]?.category : null;
+
+    const cards = DESIGNS_BY_CATEGORY.map((cat, ci) => {
+      // أول مرة: نحلو الفئة اللي فيها المختار، وإلا الأولى.
+      const isOpen = open.size
+        ? open.has(cat.id)
+        : cat.id === (activeCat ?? DESIGNS_BY_CATEGORY[0]?.id);
+      const items = cat.items
+        .map((d) => {
+          const i = indexOf(d);
+          return `
+        <button class="design" type="button" data-i="${i}"
+                aria-pressed="${source === 'gallery' && i === designIdx}">
+          <span class="design__art">
+            <img src="${d.src}" srcset="${d.srcset}" sizes="140px"
+                 alt="" width="${d.width}" height="${d.height}" loading="lazy" />
+          </span>
+          <span class="design__name">${pick(d.name)}</span>
+        </button>`;
+        })
+        .join('');
+      return `
+      <details class="cat" data-cat="${cat.id}"${isOpen ? ' open' : ''}>
+        <summary class="cat__head">
+          <span class="cat__name">${pick(cat.name)}</span>
+          <span class="cat__count">${cat.items.length}</span>
+        </summary>
+        <div class="designs__grid">${items}</div>
+      </details>`;
+    }).join('');
 
     // ثلاث حالات للبطاقة ديال الزبون:
     //   ماكاينش ملف        → علامة + ، الكليك كيحل اختيار الملف
     //   كاين وماشي مختار   → الصورة، الكليك كيرجع ليها (بلا ما يعاود يختار)
     //   كاين ومختار        → الصورة، الكليك كيبدل الملف
+    // بطاقة الزبون **برا** الفئات وفوقهم: هي ماشي فئة، وخاصها تبقى باينة
+    // مهما كانت الأقسام مسدودة.
     const picked = source === 'own';
     const ownCard = `
-      <button class="design design--own" type="button" data-own
-              aria-pressed="${picked}">
-        <span class="design__art">
-          ${
-            own
-              ? `<img src="${own.url}" alt="" />`
-              : `<span class="design__plus" aria-hidden="true">+</span>`
-          }
-        </span>
-        <span class="design__name">${t(
-          own && picked ? 'custom.ownChange' : 'custom.own'
-        )}</span>
-      </button>`;
+      <div class="designs__grid designs__own">
+        <button class="design design--own" type="button" data-own
+                aria-pressed="${picked}">
+          <span class="design__art">
+            ${
+              own
+                ? `<img src="${own.url}" alt="" />`
+                : `<span class="design__plus" aria-hidden="true">+</span>`
+            }
+          </span>
+          <span class="design__name">${t(
+            own && picked ? 'custom.ownChange' : 'custom.own'
+          )}</span>
+        </button>
+      </div>`;
 
-    el.designs.innerHTML = cards + ownCard;
+    el.designs.innerHTML = ownCard + cards;
   }
 
   function paint() {

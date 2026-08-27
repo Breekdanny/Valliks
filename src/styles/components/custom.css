@@ -86,11 +86,69 @@
 
 /* ---------- معرض الرسمات ---------- */
 
+/* المعرض = أقسام مطوية. `<details>` أصلية عوض JS: كتخدم بالكيبورد، قارئ
+   الشاشة كيعلن الحالة، وكتخدم حتى إلا طاح الجافاسكريبت. */
 .designs {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.designs__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
   gap: 0.6rem;
 }
+.designs__own { margin-block-end: 0.3rem; }
+
+.cat {
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+.cat[open] { border-color: var(--line); }
+
+.cat__head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.85rem;
+  cursor: pointer;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--text-dim);
+  list-style: none;                    /* Firefox */
+  transition: color var(--dur) var(--ease);
+}
+.cat__head::-webkit-details-marker { display: none; }   /* Safari */
+.cat__head:hover,
+.cat[open] .cat__head { color: var(--text); }
+
+/* السهم مرسوم بالـborder — بلا SVG وبلا خط أيقونات.
+   كيدور مع الاتجاه: ف RTL كيشير لليسار ملي يكون مسدود. */
+.cat__head::before {
+  content: '';
+  inline-size: 6px;
+  block-size: 6px;
+  border-inline-end: 2px solid var(--gold);
+  border-block-end: 2px solid var(--gold);
+  transform: rotate(-45deg);
+  transition: transform var(--dur) var(--ease);
+}
+html[dir='rtl'] .cat__head::before { transform: rotate(-135deg); }
+.cat[open] .cat__head::before,
+html[dir='rtl'] .cat[open] .cat__head::before { transform: rotate(45deg); }
+
+.cat__name { margin-inline-end: auto; }
+.cat__count {
+  font-size: var(--t-xs);
+  font-weight: 700;
+  color: var(--gold);
+  background: rgb(var(--gold-rgb) / 0.12);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+}
+
+.cat > .designs__grid { padding: 0 0.6rem 0.7rem; }
 
 .design {
   display: grid;
