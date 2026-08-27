@@ -1,4 +1,13 @@
 {
+  "big-dreams": {
+    "src": {
+      "900": "/designs/big-dreams-900.webp",
+      "600": "/designs/big-dreams-600.webp",
+      "300": "/designs/big-dreams-300.webp"
+    },
+    "width": 1008,
+    "height": 1536
+  },
   "high-roller": {
     "src": {
       "900": "/designs/high-roller-900.webp",
@@ -34,5 +43,14 @@
     },
     "width": 3109,
     "height": 3638
+  },
+  "unstoppable": {
+    "src": {
+      "900": "/designs/unstoppable-900.webp",
+      "600": "/designs/unstoppable-600.webp",
+      "300": "/designs/unstoppable-300.webp"
+    },
+    "width": 990,
+    "height": 1520
   }
 }

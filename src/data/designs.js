@@ -73,6 +73,24 @@ export const DESIGNS = [
     tag: { ar: 'ويسترن · فردين', fr: 'Western · Revolvers' },
     ...art('outlaw'),
   },
+
+  /* ⚠ هاد الجوج مولّدين بالذكاء الاصطناعي ف 1024×1536 — حوالي 100 DPI على
+     طبعة 38 سم، مقابل 243→280 ف رسمات الستريتوير. الطباعة على القماش
+     كتحتاج 150 DPI على الأقل. عوّضهم بنسخ 3000px+ ملي تكون عندك. */
+  {
+    id: 'big-dreams',
+    category: 'girls',
+    name: { ar: 'BIG DREAMS', fr: 'BIG DREAMS' },
+    tag: { ar: 'شريطة · فراشات', fr: 'Nœud · Papillons' },
+    ...art('big-dreams'),
+  },
+  {
+    id: 'unstoppable',
+    category: 'girls',
+    name: { ar: 'UNSTOPPABLE', fr: 'UNSTOPPABLE' },
+    tag: { ar: 'خط · تاج', fr: 'Lettrage · Couronne' },
+    ...art('unstoppable'),
+  },
 ];
 
 /* رسمة بلا فئة معروفة كتضيع ف صمت — الزبون ماكيشوفهاش وماتعرفش علاش.
