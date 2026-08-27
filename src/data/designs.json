@@ -1,34 +1,38 @@
 {
   "high-roller": {
     "src": {
+      "900": "/designs/high-roller-900.webp",
       "600": "/designs/high-roller-600.webp",
       "300": "/designs/high-roller-300.webp"
     },
-    "width": 804,
-    "height": 1152
+    "width": 2837,
+    "height": 4042
   },
   "outlaw": {
     "src": {
+      "900": "/designs/outlaw-900.webp",
       "600": "/designs/outlaw-600.webp",
       "300": "/designs/outlaw-300.webp"
     },
-    "width": 736,
-    "height": 1144
+    "width": 2507,
+    "height": 3899
   },
   "speed-demon": {
     "src": {
+      "900": "/designs/speed-demon-900.webp",
       "600": "/designs/speed-demon-600.webp",
       "300": "/designs/speed-demon-300.webp"
     },
-    "width": 864,
-    "height": 1000
+    "width": 3539,
+    "height": 4192
   },
   "total-strike": {
     "src": {
+      "900": "/designs/total-strike-900.webp",
       "600": "/designs/total-strike-600.webp",
       "300": "/designs/total-strike-300.webp"
     },
-    "width": 838,
-    "height": 992
+    "width": 3109,
+    "height": 3638
   }
 }
