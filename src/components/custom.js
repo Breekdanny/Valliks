@@ -49,7 +49,10 @@ export function createCustomSection({ onOrder }) {
 
   let shirt = 0;                                   // فهرس ف CUSTOM.variants
   let sizeIdx = SIZES.findIndex((s) => s.size === 'L');
-  let designIdx = 0;                               // فهرس ف DESIGNS
+  // -1 = ماكاين حتى رسمة مختارة. القسم كيبدا **بتيشيرت خاوي** عن قصد:
+  // الزبون هو اللي كيختار. رسمة مختارة سلفاً كتوهم أنها جزء من المنتج،
+  // وكتخلي اللي بغا يحط الديزاين ديالو يظن أنه خاصو يحيدها أولاً.
+  let designIdx = -1;
   let source = 'gallery';                          // 'gallery' | 'own'
   let own = null;                                  // { url, img, name }
   let cm = PRINT.defaultCm;
@@ -102,7 +105,7 @@ export function createCustomSection({ onOrder }) {
     if (source === 'own') {
       return own ? { width: own.img.naturalWidth, height: own.img.naturalHeight } : null;
     }
-    return DESIGNS[designIdx];
+    return DESIGNS[designIdx] ?? null;             // designIdx = -1 → خاوي
   }
 
   const artKey = () => (source === 'own' ? `own:${own?.url}` : DESIGNS[designIdx].id);

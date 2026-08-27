@@ -41,7 +41,7 @@ export const CATEGORIES = [
   { id: 'anime', name: { ar: 'أنيمي', fr: 'Anime' } },
   { id: 'quotes', name: { ar: 'مقولات', fr: 'Citations' } },
   { id: 'simple', name: { ar: 'بسيط', fr: 'Minimaliste' } },
-  { id: 'kids', name: { ar: 'دراري', fr: 'Enfants' } },
+  { id: 'girls', name: { ar: 'بنات', fr: 'Filles' } },
 ];
 
 export const DESIGNS = [
