@@ -208,8 +208,12 @@ export const PRINT = {
   back: {
     top: 0.335,
     bottom: 0.840,
-    minCm: 20,
-    maxCm: 42,
+    // المدى واسع عن قصد: من شارة صغيرة حتى طبعة ظهر كاملة.
+    // ⚠ عرض الجذع الحقيقي 58 سم على قياس L (62 على XXL). فوق هادشي
+    // الطبعة كتخرج على حدود التيشيرت وكتقص — المعاينة كتوريها مقصوصة
+    // بصدق، ولكن ورشة الطباعة ماتقدرش تطبعها كاملة.
+    minCm: 8,
+    maxCm: 70,
     defaultCm: 38,   // وسط المدى ديال الطبعات الحقيقية (34→42)
   },
 
@@ -224,11 +228,20 @@ export const PRINT = {
   front: {
     top: 0.320,
     bottom: 0.780,
-    minCm: 15,
-    maxCm: 32,
+    minCm: 8,
+    maxCm: 60,
     defaultCm: 26,
   },
 };
+
+/* أقل كثافة مقبولة للطباعة على القماش. تحتها الحواف كتبان مسننة والحروف
+   الرقيقة كتتهرس. 150 هو المعيار الصناعي؛ 100 هو الحد اللي تحتو الفرق
+   كيبان بالعين — وهو نفس الحد اللي كان مخبي ف MIN_PRINT_PX = 1500
+   (1500px على 38 سم = 100 DPI بالضبط). */
+export const MIN_DPI = 100;
+
+/** كثافة الطبعة بالنقطة/بوصة: أكبر بُعد ديال الملف على الحجم المطلوب. */
+export const printDpi = (px, cm) => (cm > 0 ? (px / cm) * 2.54 : Infinity);
 
 /** إعدادات الوجه الحالي. `side` = 'back' | 'front'. */
 export const printFor = (side) => PRINT[side] ?? PRINT.back;
@@ -244,10 +257,13 @@ export const cmPerFrame = (chest) => chest / PRINT.torsoWidth;
  * أكبر حجم طباعة ممكن لرسمة معينة: محدود بالعرض (maxCm) وبالطول المتاح ف
  * الظهر. الرسمات الطوال كيحدهم الطول قبل العرض.
  */
-export function maxPrintCm(design, chest, side = 'back') {
-  const p = printFor(side);
-  const frame = cmPerFrame(chest);
-  const roomCm = (p.bottom - p.top) * frame;
-  const byHeight = roomCm * (design.width / design.height);
-  return Math.floor(Math.min(p.maxCm, byHeight));
+export function maxPrintCm(side = 'back') {
+  /* الحد هو maxCm وحدو.
+     كان كاين حد ثاني: `roomCm * (w/h)` — يعني الرسمة ماتخرجش على المساحة
+     بين top وbottom. كيخدم مزيان للطبعة العادية، ولكن كيمنع **الطبعة على
+     التيشيرت كامل**: رسمة طويلة (نسبة 0.65) كانت كتوقف ف 36 سم مهما رفعنا
+     maxCm. وطبعة all-over خاصها تخرج على الحواف — هادا هو الشكل ديالها.
+     الخروج ماشي عيب: render() كيقص على قناة alpha ديال التيشيرت، فالمعاينة
+     كتوري بالضبط شنو غادي يتطبع. */
+  return Math.floor(printFor(side).maxCm);
 }

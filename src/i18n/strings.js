@@ -84,7 +84,7 @@ export const ar = {
   'custom.sidesLabel': 'وجه التيشيرت',
   'custom.previewAlt': 'معاينة الديزاين على التيشيرت',
   'custom.warnLow':
-    'الصورة صغيرة (أقل من 1500 بيكسل) — الطبعة غادي تبان مبكسلة. صيفط نسخة أكبر إلا كانت عندك.',
+    'الرسمة صغيرة على هاد الحجم — الطبعة غادي تبان مبكسلة. صغّر حجم الطباعة، ولا صيفط نسخة أكبر من الملف.',
   'custom.warnBig': 'الملف كبير بزاف. الحد الأقصى 10 ميغا.',
   'custom.warnFile': 'ماقدرناش نقراو هاد الملف. جرب PNG ولا JPG ولا WebP.',
   'custom.warnPick': 'ختار رسمة من المعرض ولا حط الديزاين ديالك.',
@@ -259,7 +259,7 @@ export const fr = {
   'custom.sidesLabel': 'Face du t-shirt',
   'custom.previewAlt': 'Aperçu du design sur le t-shirt',
   'custom.warnLow':
-    "Image trop petite (moins de 1500 px) — l'impression sera pixelisée. Envoyez une version plus grande si vous en avez une.",
+    "Le visuel est trop petit à cette taille — l'impression sera pixelisée. Réduisez la taille d'impression ou envoyez un fichier plus grand.",
   'custom.warnBig': 'Fichier trop lourd. Maximum 10 Mo.',
   'custom.warnFile': 'Impossible de lire ce fichier. Essayez un PNG, JPG ou WebP.',
   'custom.warnPick': 'Choisissez un visuel dans la galerie ou envoyez le vôtre.',

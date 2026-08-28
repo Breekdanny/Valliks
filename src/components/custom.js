@@ -14,15 +14,13 @@
 import { CUSTOM, SIZES } from '../data/products.js';
 import {
   DESIGNS, DESIGNS_BY_CATEGORY, PRINT, printFor, cmPerFrame, maxPrintCm,
+  MIN_DPI, printDpi,
 } from '../data/designs.js';
 import { loadShirt, scaleArt, render } from '../lib/mockup.js';
 import { pick, t } from '../i18n/index.js';
 
 const CANVAS = 1080;
 
-/* تحت 1500px الطبعة كتبان مبكسلة على تيشيرت. الرقم جاي من العرض الحقيقي:
-   طبعة 38 سم على 100 dpi = 1496px. تحتيه كيبان الفرق بالعين. */
-const MIN_PRINT_PX = 1500;
 const MAX_FILE_MB = 10;
 const NUDGE = 0.006;        // خطوة الأسهم ف لوحة المفاتيح
 
@@ -155,7 +153,7 @@ export function createCustomSection({ onOrder }) {
     const s = S();
     const p = P();
     const meta = artMeta();
-    const max = meta ? maxPrintCm(meta, SIZES[sizeIdx].chest, side) : p.maxCm;
+    const max = meta ? maxPrintCm(side) : p.maxCm;
     el.cm.min = String(p.minCm);
     el.cm.max = String(max);
     s.cm = Math.min(Math.max(s.cm, p.minCm), max);
@@ -166,9 +164,18 @@ export function createCustomSection({ onOrder }) {
   /** الموضع الافتراضي: وسط الجذع، تحت خياطة الرقبة. */
   function resetPos() {
     const s = S();
+    const p = P();
     const box = printBox();
     s.cx = PRINT.centerX;
-    s.cy = P().top + (box ? box.h / CANVAS / 2 : 0.2);
+
+    /* الطبعة العادية كتبدا من `top` (تحت خياطة الرقبة).
+       أما إلا كانت أطول من المساحة المتاحة — يعني طبعة على التيشيرت كامل —
+       فمحاذاتها للفوق كتخليها كلها كتخرج من التحت. ف هاد الحالة كنوسطوها
+       على الجذع باش تخرج بالتساوي من الجوج. */
+    const h = box ? box.h / CANVAS : 0.4;
+    s.cy = h > p.bottom - p.top
+      ? (p.top + p.bottom) / 2
+      : p.top + h / 2;
     s.placed = false;
   }
 
@@ -396,12 +403,28 @@ export function createCustomSection({ onOrder }) {
     el.designs.innerHTML = ownCard + cards;
   }
 
+  /**
+   * تحذير الدقة — كيتحسب من **الحجم المطلوب**، ماشي من الملف وحدو.
+   *
+   * العتبة القديمة كانت 1500px ثابتة على الملف. مع مدى 8→52 سم هادشي
+   * ولا غالط: نفس الملف كيعطي 324 DPI ف 10 سم و62 ف 52 سم — والموقع
+   * كان غادي يقول نفس الشي ف الجوج. دابا التحذير كيبان وكيختافى ملي
+   * يحرك الزبون السلايدر.
+   */
+  function checkRes() {
+    const meta = artMeta();
+    if (!meta) return warn(null);
+    const dpi = printDpi(Math.max(meta.width, meta.height), S().cm);
+    warn(dpi < MIN_DPI ? t('custom.warnLow') : null);
+  }
+
   function paint() {
     paintSides();
     paintShirt();
     paintSize();
     paintDesigns();
     clampCm();
+    checkRes();
     draw();
   }
 
@@ -434,14 +457,7 @@ export function createCustomSection({ onOrder }) {
     s.source = 'own';
     s.placed = false;
 
-    // تحذير ماشي منع: الزبون ممكن يكون عارف وباغي يكمل.
-    warn(
-      Math.max(img.naturalWidth, img.naturalHeight) < MIN_PRINT_PX
-        ? t('custom.warnLow')
-        : null
-    );
-
-    paint();
+    paint();          // checkRes() جوا paint كيتكلف بالتحذير
   }
 
   /* ---------- السحب ---------- */
@@ -555,6 +571,7 @@ export function createCustomSection({ onOrder }) {
     const s = S();
     s.cm = Number(el.cm.value);
     el.cmOut.textContent = `${s.cm} ${t('custom.cm')}`;
+    checkRes();                    // الدقة كتتبدل مع الحجم
     schedule();
   });
 
