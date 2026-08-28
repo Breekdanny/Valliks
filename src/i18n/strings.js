@@ -78,6 +78,7 @@ export const ar = {
   'custom.order': 'كمل الطلب',
   'custom.hint':
     'بدل بين اللور والقدّام فوق المعاينة. تقدر تطبع على الجوج ف نفس الطلب — بنفس الثمن.',
+  'custom.side': 'الوجه',
   'custom.back': 'اللور',
   'custom.front': 'القدّام',
   'custom.sidesLabel': 'وجه التيشيرت',
@@ -252,6 +253,7 @@ export const fr = {
   'custom.order': 'Continuer la commande',
   'custom.hint':
     "Basculez entre dos et devant au-dessus de l'aperçu. Vous pouvez imprimer les deux dans la même commande — au même prix.",
+  'custom.side': 'Face',
   'custom.back': 'Dos',
   'custom.front': 'Devant',
   'custom.sidesLabel': 'Face du t-shirt',

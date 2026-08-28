@@ -145,15 +145,6 @@
 
         <div class="studio" data-reveal>
           <div class="studio__preview">
-            <!-- الوجه كيبدل شنو كتشوف، فخاصو يكون حدا الكانفاس ماشي ف
-                 عمود التحكم. النقطة الذهبية = هاد الوجه فيه رسمة. -->
-            <div class="sides" id="customSides" role="tablist"
-                 data-i18n-aria="custom.sidesLabel" aria-label="وجه التيشيرت">
-              <button class="sides__tab" type="button" role="tab" data-side="back"
-                      aria-selected="true" data-i18n="custom.back">اللور</button>
-              <button class="sides__tab" type="button" role="tab" data-side="front"
-                      aria-selected="false" data-i18n="custom.front">القدّام</button>
-            </div>
             <!-- tabindex باش الطبعة تتحرك بالأسهم حتى بلا فارة -->
             <canvas id="customCanvas" width="1080" height="1080" tabindex="0"
                     role="img" data-i18n-aria="custom.previewAlt"
@@ -174,6 +165,19 @@
             <div class="field" id="fCustomShirt">
               <label data-i18n="custom.shirt">التيشيرت</label>
               <div class="chips" id="customShirt"></div>
+            </div>
+
+            <!-- بين التيشيرت والقياس. النقطة الذهبية على الزر = هاد الوجه
+                 فيه رسمة، باش الزبون يعرف واش عمّر الوجه الآخر. -->
+            <div class="field" id="fCustomSides">
+              <label data-i18n="custom.side">الوجه</label>
+              <div class="chips sides" id="customSides" role="tablist"
+                   data-i18n-aria="custom.sidesLabel" aria-label="وجه التيشيرت">
+                <button class="chip sides__tab" type="button" role="tab" data-side="back"
+                        aria-selected="true" data-i18n="custom.back">اللور</button>
+                <button class="chip sides__tab" type="button" role="tab" data-side="front"
+                        aria-selected="false" data-i18n="custom.front">القدّام</button>
+              </div>
             </div>
 
             <div class="field">

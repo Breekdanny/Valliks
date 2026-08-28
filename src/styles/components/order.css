@@ -93,6 +93,12 @@
 }
 
 .field { display: grid; gap: 0.4rem; }
+
+/* ⚠ ضروري. المتصفح عندو `[hidden] { display: none }` ف ستايلو الافتراضي،
+   ولكن **ستايل المؤلف كيغلب ستايل المتصفح** — إذن `display: grid` فوق
+   كيلغي الإخفاء. بلا هاد السطر `el.fColor.hidden = true` ماكيدير والو،
+   وحقل اللون كيبان حتى ملي يكون لون واحد. */
+.field[hidden] { display: none; }
 .field > label {
   font-size: var(--t-xs);
   letter-spacing: 0.1em;

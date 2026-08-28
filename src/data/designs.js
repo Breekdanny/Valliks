@@ -42,6 +42,7 @@ export const CATEGORIES = [
   { id: 'quotes', name: { ar: 'مقولات', fr: 'Citations' } },
   { id: 'simple', name: { ar: 'بسيط', fr: 'Minimaliste' } },
   { id: 'girls', name: { ar: 'بنات', fr: 'Filles' } },
+  { id: 'boys', name: { ar: 'دراري', fr: 'Garçons' } },
 ];
 
 export const DESIGNS = [
@@ -90,6 +91,70 @@ export const DESIGNS = [
     name: { ar: 'UNSTOPPABLE', fr: 'UNSTOPPABLE' },
     tag: { ar: 'خط · تاج', fr: 'Lettrage · Couronne' },
     ...art('unstoppable'),
+  },
+
+  /* ⚠ الدفعة ديال 28 غشت — مولّدين بالذكاء الاصطناعي ف ~1024×1536.
+     84→103 DPI على طبعة 38 سم، مقابل 243→280 ف رسمات الستريتوير.
+     الطباعة كتحتاج 150 على الأقل. عوّضهم بنسخ 3000px+ ملي تكون عندك.
+
+     ⚠⚠ `dream-plan-do` فيها ساك بشعار YSL و `discipline` فيها طوموبيل
+     بشعار Mercedes. هادو علامات تجارية مسجلة. نبهنا صاحب المتجر مرتين
+     وقرر يمشي بيهم — القرار ديالو، والخطر القانوني عليه. */
+  {
+    id: 'blue-butterfly',
+    category: 'girls',
+    name: { ar: 'DREAM BIG', fr: 'DREAM BIG' },
+    tag: { ar: 'فراشة · نار زرقا', fr: 'Papillon · Flamme bleue' },
+    ...art('blue-butterfly'),
+  },
+  {
+    id: 'dark-queen',
+    category: 'girls',
+    name: { ar: 'DARK QUEEN', fr: 'DARK QUEEN' },
+    tag: { ar: 'تاج · ورود', fr: 'Couronne · Roses' },
+    ...art('dark-queen'),
+  },
+  {
+    id: 'stay-positive',
+    category: 'girls',
+    name: { ar: 'STAY POSITIVE', fr: 'STAY POSITIVE' },
+    tag: { ar: 'ورود · ذهبي', fr: 'Lys · Or' },
+    ...art('stay-positive'),
+  },
+  {
+    id: 'dream-plan-do',
+    category: 'girls',
+    name: { ar: 'DREAM PLAN DO', fr: 'DREAM PLAN DO' },
+    tag: { ar: 'خط · ذهبي', fr: 'Lettrage · Or' },
+    ...art('dream-plan-do'),
+  },
+  {
+    id: 'blue-crown',
+    category: 'boys',
+    name: { ar: 'BLUE CROWN', fr: 'BLUE CROWN' },
+    tag: { ar: 'هودي · نار زرقا', fr: 'Hoodie · Flamme bleue' },
+    ...art('blue-crown'),
+  },
+  {
+    id: 'discipline',
+    category: 'boys',
+    name: { ar: 'DISCIPLINE', fr: 'DISCIPLINE' },
+    tag: { ar: 'أسد · تحفيز', fr: 'Lion · Motivation' },
+    ...art('discipline'),
+  },
+  {
+    id: 'venom',
+    category: 'anime',
+    name: { ar: 'VENOM', fr: 'VENOM' },
+    tag: { ar: 'حنش · أنيمي', fr: 'Serpent · Anime' },
+    ...art('venom'),
+  },
+  {
+    id: 'peaks',
+    category: 'quotes',
+    name: { ar: 'STAY REAL', fr: 'STAY REAL' },
+    tag: { ar: 'جبال · خط', fr: 'Montagnes · Ligne' },
+    ...art('peaks'),
   },
 ];
 

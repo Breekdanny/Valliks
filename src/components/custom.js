@@ -41,6 +41,7 @@ export function createCustomSection({ onOrder }) {
     reset: document.getElementById('customReset'),
     place: document.getElementById('customPlace'),
     sides: document.getElementById('customSides'),
+    fSides: document.getElementById('fCustomSides'),
     order: document.getElementById('customOrder'),
   };
 
@@ -289,7 +290,9 @@ export function createCustomSection({ onOrder }) {
    */
   function paintSides() {
     const can = hasFront();
-    el.sides.hidden = !can;
+    // كنخبيو الحقل كامل (بالعنوان)، ماشي غير الأزرار — عنوان "الوجه" بلا
+    // أزرار تحتو كيبان بحال حاجة تهرست.
+    el.fSides.hidden = !can;
     if (!can && side === 'front') side = 'back';   // اللون ماعندوش قدّام
 
     [...el.sides.querySelectorAll('[data-side]')].forEach((b) => {

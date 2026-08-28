@@ -8,6 +8,51 @@
     "width": 1008,
     "height": 1536
   },
+  "blue-butterfly": {
+    "src": {
+      "900": "/designs/blue-butterfly-900.webp",
+      "600": "/designs/blue-butterfly-600.webp",
+      "300": "/designs/blue-butterfly-300.webp"
+    },
+    "width": 955,
+    "height": 1507
+  },
+  "blue-crown": {
+    "src": {
+      "900": "/designs/blue-crown-900.webp",
+      "600": "/designs/blue-crown-600.webp",
+      "300": "/designs/blue-crown-300.webp"
+    },
+    "width": 1004,
+    "height": 1536
+  },
+  "dark-queen": {
+    "src": {
+      "900": "/designs/dark-queen-900.webp",
+      "600": "/designs/dark-queen-600.webp",
+      "300": "/designs/dark-queen-300.webp"
+    },
+    "width": 1024,
+    "height": 1536
+  },
+  "discipline": {
+    "src": {
+      "900": "/designs/discipline-900.webp",
+      "600": "/designs/discipline-600.webp",
+      "300": "/designs/discipline-300.webp"
+    },
+    "width": 1023,
+    "height": 1536
+  },
+  "dream-plan-do": {
+    "src": {
+      "900": "/designs/dream-plan-do-900.webp",
+      "600": "/designs/dream-plan-do-600.webp",
+      "300": "/designs/dream-plan-do-300.webp"
+    },
+    "width": 1068,
+    "height": 1374
+  },
   "high-roller": {
     "src": {
       "900": "/designs/high-roller-900.webp",
@@ -26,6 +71,15 @@
     "width": 2507,
     "height": 3899
   },
+  "peaks": {
+    "src": {
+      "900": "/designs/peaks-900.webp",
+      "600": "/designs/peaks-600.webp",
+      "300": "/designs/peaks-300.webp"
+    },
+    "width": 1277,
+    "height": 947
+  },
   "speed-demon": {
     "src": {
       "900": "/designs/speed-demon-900.webp",
@@ -34,6 +88,15 @@
     },
     "width": 3539,
     "height": 4192
+  },
+  "stay-positive": {
+    "src": {
+      "900": "/designs/stay-positive-900.webp",
+      "600": "/designs/stay-positive-600.webp",
+      "300": "/designs/stay-positive-300.webp"
+    },
+    "width": 1186,
+    "height": 1261
   },
   "total-strike": {
     "src": {
@@ -52,5 +115,14 @@
     },
     "width": 990,
     "height": 1520
+  },
+  "venom": {
+    "src": {
+      "900": "/designs/venom-900.webp",
+      "600": "/designs/venom-600.webp",
+      "300": "/designs/venom-300.webp"
+    },
+    "width": 1222,
+    "height": 1269
   }
 }

@@ -88,31 +88,24 @@
 
 /* ---------- أزرار قدّام/لور ---------- */
 
-.sides {
-  display: inline-flex;
-  gap: 0.25rem;
-  padding: 0.25rem;
-  margin-block-end: 0.75rem;
-  background: var(--sunken);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--r);
-}
+/* ⚠ ضروري. المتصفح عندو `[hidden] { display: none }` ف ستايلو الافتراضي،
+   ولكن **ستايل المؤلف كيغلب ستايل المتصفح** — و`.chips` عندو display:flex.
+   بلا هاد السطر `el.sides.hidden = true` ماكيدير والو، والأزرار كيبانو على
+   الكحل والبيض اللي ماعندهمش موكاب قدّام. */
+.sides[hidden] { display: none; }
 
+/* الأزرار كتاخد شكل `.chip` ديال اللون والقياس — نفس اللغة البصرية اللي
+   الزبون ديجا كيتعامل معاها. */
 .sides__tab {
   position: relative;
-  padding: 0.45rem 1.1rem;
-  border: 0;
-  border-radius: 2px;
-  background: transparent;
-  color: var(--text-dim);
-  font-size: var(--t-sm);
-  font-weight: 600;
-  cursor: pointer;
-  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+  flex: 1;
+  max-inline-size: 11rem;
+  justify-content: center;
+  font-weight: 700;
 }
-.sides__tab:hover { color: var(--text); }
 .sides__tab[aria-selected='true'] {
-  background: rgb(var(--gold-rgb) / 0.14);
+  border-color: var(--gold);
+  background: rgb(var(--gold-rgb) / 0.12);
   color: var(--gold);
 }
 
@@ -122,9 +115,9 @@
   content: '';
   position: absolute;
   inset-block-start: 0.3rem;
-  inset-inline-end: 0.35rem;
-  inline-size: 5px;
-  block-size: 5px;
+  inset-inline-end: 0.4rem;
+  inline-size: 6px;
+  block-size: 6px;
   border-radius: 50%;
   background: var(--gold);
 }
