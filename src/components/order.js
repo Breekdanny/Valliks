@@ -229,9 +229,10 @@ export function createOrderModal() {
       city: el.city.value,
       address: el.address.value.trim(),
       notes: el.notes.value,
-      design: extra.design,
-      printCm: extra.printCm,
+      // كتلة لكل وجه معمّر — قدّام و/ولا لور
+      sides: extra.sides,
       ownDesign: extra.ownDesign,
+      ownCount: extra.ownCount,
     });
 
     const url = buildLink(SHOP.whatsapp, msg);
@@ -248,7 +249,8 @@ export function createOrderModal() {
     /**
      * كيحل النافذة على منتج محدد.
      * `opts` كتجي معمّرة غير من قسم "صمم ديالك":
-     * { design, printCm, ownDesign, preview, size }
+     * { sides: [{ side, design, printCm, placement }], ownDesign,
+     *   ownCount, preview, size }
      */
     open(id, variantIndex = 0, opts = {}) {
       product = byId(id) ?? PRODUCTS[0];

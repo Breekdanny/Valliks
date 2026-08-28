@@ -49,6 +49,8 @@ export function buildMessage(o) {
         attachHead: 'مهم',
         attach:
           'لصق الصورة ديال الديزاين ف هاد المحادثة قبل ما تصيفط الرسالة — بلاها ماغاديش نقدرو نطبعو الطلب.',
+        attachMany: (n) =>
+          `لصق **${n}** صور ديال الديزاين ف هاد المحادثة قبل ما تصيفط الرسالة — وحدة لكل وجه. بلاهم ماغاديش نقدرو نطبعو الطلب.`,
         qty: 'الكمية',
         unit: 'الثمن',
         sub: 'المجموع',
@@ -76,6 +78,8 @@ export function buildMessage(o) {
         attachHead: 'Important',
         attach:
           "Joignez l'image de votre design dans cette conversation avant d'envoyer — sans elle, on ne peut pas lancer l'impression.",
+        attachMany: (n) =>
+          `Joignez **${n}** images dans cette conversation avant d'envoyer — une par face. Sans elles, on ne peut pas lancer l'impression.`,
         qty: 'Quantité',
         unit: 'Prix',
         sub: 'Sous-total',
@@ -101,10 +105,16 @@ export function buildMessage(o) {
     `${L.size}: ${o.size}`,
   ];
 
-  // الطلب المخصص كيزيد سطرين. الطلبات العادية ماكيتبدل فيهم والو.
-  if (o.design) lines.push(`${L.design}: ${o.design}`);
-  if (o.printCm) lines.push(`${L.print}: ${o.printCm} ${L.cm}`);
-  if (o.placement) lines.push(`${L.place}: ${o.placement}`);
+  /* الطلب المخصص كيزيد كتلة **لكل وجه** معمّر. الوجه الخاوي ماكيتذكرش —
+     ورشة الطباعة خاصها تعرف بالضبط شنو تطبع وفين، بلا تخمين.
+     الطلبات العادية (o.sides خاوي) ماكيتبدل فيهم والو. */
+  for (const s of o.sides ?? []) {
+    lines.push('', `*${s.side}*`);
+    if (s.design) lines.push(`${L.design}: ${s.design}`);
+    if (s.printCm) lines.push(`${L.print}: ${s.printCm} ${L.cm}`);
+    if (s.placement) lines.push(`${L.place}: ${s.placement}`);
+  }
+  if (o.sides?.length) lines.push('');
 
   lines.push(
     `${L.qty}: ${o.qty}`,
@@ -126,7 +136,12 @@ export function buildMessage(o) {
 
   // التذكير آخر حاجة ف الرسالة عن قصد — هو آخر شي كيقرا الزبون قبل ما يصيفط.
   // رابط wa.me كيحمل نص فقط، فماكاينش طريقة نلصقو الصورة نيابة عليه.
-  if (o.ownDesign) lines.push('', `*⚠ ${L.attachHead}*`, L.attach);
+  // ⚠ العدد مهم: وجهين بديزاين ديال الزبون = **جوج ملفات**، وبلا ما نقولوها
+  // الزبون كيلصق وحدة وكيظن أنه سالا.
+  if (o.ownDesign) {
+    const n = o.ownCount ?? 1;
+    lines.push('', `*⚠ ${L.attachHead}*`, n > 1 ? L.attachMany(n) : L.attach);
+  }
 
   return lines.join('\n');
 }

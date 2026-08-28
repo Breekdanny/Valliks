@@ -134,9 +134,21 @@ for (const key of Object.keys(images)) {
   }
 }
 
+/* صورة القدّام كتتعرض **غير ف كانفاس المعاينة**، فماكتحتاجش srcset —
+   عندها نسخة 1080 وحدها. `front` كيبقى undefined إلا ماكانش الموكاب،
+   و custom.js كيخبي زر "القدّام" على داك اللون. */
+function frontShot(stem) {
+  const m = images[stem];
+  return m ? { solidFull: m.solid[1080], cutFull: m.cut[1080] } : undefined;
+}
+
 const BLANK_VARIANTS = BLANK_ORDER
   .filter((k) => images[`blank-${k}`])
-  .map((k) => ({ ...COLOR_BY_KEY[k], ...shot(`blank-${k}`) }));
+  .map((k) => ({
+    ...COLOR_BY_KEY[k],
+    ...shot(`blank-${k}`),
+    front: frontShot(`blank-${k}-front`),
+  }));
 
 if (!BLANK_VARIANTS.length) {
   throw new Error('ماكاين حتى موكاب خاوي — شغّل: npm run mockups && npm run images');
@@ -238,6 +250,10 @@ export const PRODUCTS = [
    images.json. باش تزيد لون: حط الموكاب ف raw/incoming/، شغّل
    `npm run mockups` ومن بعد `npm run images`. اللون كيبان بوحدو — بلا
    ما تمس هاد الملف، غير إلا كان لون جديد بالكامل فخاصو ثابت فوق.
+
+   ⚠ الثمن **واحد للوجه وللوجهين**. الزبون كيقدر يطبع قدّام ولور ف نفس
+   الطلب وكيخلص 189 د.م. هادا قرار مقصود ماشي غلطة — إلا بغيتي زيادة على
+   الوجه الثاني، خاص يتزاد حقل هنا وتتحسب ف order.js (billing).
 
    TODO: 189 هو نفس ثمن المطبوعين الجاهزين. إلا كانت الطباعة المخصصة
          (وحدة بوحدة، بلا كمية) كتكلفك أكثر، رفع هاد الرقم.

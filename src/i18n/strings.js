@@ -64,6 +64,7 @@ export const ar = {
   // الموكاب من اللور، فاليمين ف الصورة هو اليسار ديال اللي لابس. كنقولو
   // "ف الصورة" بصراحة عوض ما نخليو الغموض يوصل لورشة الطباعة.
   'custom.zoneBack': 'الظهر',
+  'custom.zoneFront': 'الصدر',
   'custom.zoneSleeveStart': 'الكم على اليسار ف الصورة',
   'custom.zoneSleeveEnd': 'الكم على اليمين ف الصورة',
   'custom.belowCollar': 'تحت الرقبة',
@@ -76,7 +77,10 @@ export const ar = {
   'custom.fileNote': 'PNG بخلفية شفافة هو الأحسن. تقبل حتى JPG وWebP.',
   'custom.order': 'كمل الطلب',
   'custom.hint':
-    'المعاينة على الظهر. بغيتي الطباعة على الصدر؟ كتبها ف خانة الملاحظة ف الخطوة الجاية.',
+    'بدل بين اللور والقدّام فوق المعاينة. تقدر تطبع على الجوج ف نفس الطلب — بنفس الثمن.',
+  'custom.back': 'اللور',
+  'custom.front': 'القدّام',
+  'custom.sidesLabel': 'وجه التيشيرت',
   'custom.previewAlt': 'معاينة الديزاين على التيشيرت',
   'custom.warnLow':
     'الصورة صغيرة (أقل من 1500 بيكسل) — الطبعة غادي تبان مبكسلة. صيفط نسخة أكبر إلا كانت عندك.',
@@ -234,6 +238,7 @@ export const fr = {
   // Le mockup est vu de dos : la droite sur l'image est la gauche de celui qui
   // le porte. On le dit explicitement pour éviter toute erreur à l'impression.
   'custom.zoneBack': 'Dos',
+  'custom.zoneFront': 'Devant',
   'custom.zoneSleeveStart': "Manche à gauche sur l'image",
   'custom.zoneSleeveEnd': "Manche à droite sur l'image",
   'custom.belowCollar': 'sous le col',
@@ -246,7 +251,10 @@ export const fr = {
   'custom.fileNote': 'Un PNG à fond transparent donne le meilleur résultat. JPG et WebP acceptés.',
   'custom.order': 'Continuer la commande',
   'custom.hint':
-    "L'aperçu est au dos. Vous voulez une impression devant ? Indiquez-le dans la note à l'étape suivante.",
+    "Basculez entre dos et devant au-dessus de l'aperçu. Vous pouvez imprimer les deux dans la même commande — au même prix.",
+  'custom.back': 'Dos',
+  'custom.front': 'Devant',
+  'custom.sidesLabel': 'Face du t-shirt',
   'custom.previewAlt': 'Aperçu du design sur le t-shirt',
   'custom.warnLow':
     "Image trop petite (moins de 1500 px) — l'impression sera pixelisée. Envoyez une version plus grande si vous en avez une.",

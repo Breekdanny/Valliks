@@ -14,6 +14,17 @@
     "width": 1080,
     "height": 1080
   },
+  "blank-grey-front": {
+    "solid": {
+      "1080": "/products/blank-grey-front-solid-1080.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-grey-front-cut-1080.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAAAwBACdASoYABgAPu1au12po6amlAEwHYlnAMiYVlBpaVaeOCQrO/tzyAAA/uzVWqjxKv+h3V1U3YlHQr/ACAkgyUAAAA==",
+    "width": 2200,
+    "height": 2200
+  },
   "blank-grey": {
     "solid": {
       "1080": "/products/blank-grey-solid-1080.webp",
@@ -29,6 +40,17 @@
     "width": 2200,
     "height": 2200
   },
+  "blank-ink-front": {
+    "solid": {
+      "1080": "/products/blank-ink-front-solid-1080.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-ink-front-cut-1080.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQBACdASoYABgAPt1cpU2opSOiN/qoARAbiWgAyJgh38dANWTBz8oMZdq6+VBDgAD+5d5jo9y6AdQuG2G/Qb1DJVzEBam6mFdVQtp8fyUYzY5q2+ZtirHEZUmZpPgAAAA=",
+    "width": 2200,
+    "height": 2200
+  },
   "blank-ink": {
     "solid": {
       "1080": "/products/blank-ink-solid-1080.webp",
@@ -41,6 +63,17 @@
       "480": "/products/blank-ink-cut-480.webp"
     },
     "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQBACdASoYABgAPt1apU2opSOiN/qoARAbiWYAyJgh38dANWTBz8oMZdq6+VBDgAD+5d5jo9y6AdQuG2G/Qb1DJVzEBam6mFdVQtp8fyUYzY5q2+ZtirHEZUmZpPgAAAA=",
+    "width": 2200,
+    "height": 2200
+  },
+  "blank-sage-front": {
+    "solid": {
+      "1080": "/products/blank-sage-front-solid-1080.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-sage-front-cut-1080.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAABQBACdASoYABgAPtVao02oJSMiN+gBABqJQBhmhkn4abbl3rLHtFM2PfoAAP7l5JJt2n3lsJP8oVMPVh0PX4rZha2thD1jeWK9028gAAA=",
     "width": 2200,
     "height": 2200
   },

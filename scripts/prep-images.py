@@ -74,6 +74,9 @@ GOLD = (212, 166, 42)
 WORD_COLOR = (255, 199, 39)
 
 WIDTHS = [1080, 720, 480]
+# القدّام كيتستعمل غير ف كانفاس المعاينة (1080) — ماكاينش <img> كيعرضو
+# بـsrcset، فالنسخ الصغار ضايعين.
+FRONT_WIDTHS = [1080]
 # الرسمة كتبان أصغر من التيشيرت (بطاقة ف المعرض + طبعة ف المعاينة)، فماكاينش
 # داعي لـ1080. أكبر استعمال هو المعاينة على canvas ~900px.
 DESIGN_WIDTHS = [900, 600, 300]
@@ -407,14 +410,14 @@ def lqip(img):
 
 def process_products():
     manifest = {}
-    # JPG (الموكابات الفوتوغرافية) + PNG (الفيكتور الجداد). بلا زيادة PNG
-    # الصور الجديدة كيتقفزو ف صمت و`shot()` ف products.js كترمي خطأ.
-    # صور القدّام (`-front`) محفوظة ف raw/ للمعرض من بعد، ولكن ماكيتعالجوش
-    # دابا: الموقع كيعرض غير اللور، وكل صورة معالجة كتزيد ~350KB ف dist/.
-    sources = [p for p in sorted([*RAW.glob("*.jpg"), *RAW.glob("*.png")])
-               if not p.stem.endswith("-front")]
+    # JPG (الموكابات الفوتوغرافية) + PNG. بلا زيادة PNG الصور الجديدة
+    # كيتقفزو ف صمت و`shot()` ف products.js كترمي خطأ.
+    sources = sorted([*RAW.glob("*.jpg"), *RAW.glob("*.png")])
     for src in sources:
         stem = src.stem
+        # صور القدّام كتتعرض **غير ف كانفاس المعاينة** (solidFull/cutFull)،
+        # ماشي ف <img> بـsrcset. توليد 480 و720 ليها = ~1.4 MB ضايعين ف dist/.
+        widths = FRONT_WIDTHS if stem.endswith("-front") else WIDTHS
         img = Image.open(src)
         alpha = load_alpha(img)
         img = img.convert("RGB")
@@ -435,8 +438,8 @@ def process_products():
         cut = Image.fromarray(to_cutout(arr, mask), mode="RGBA")
 
         manifest[stem] = {
-            "solid": save_sizes(solid, stem, "solid"),
-            "cut": save_sizes(cut, stem, "cut"),
+            "solid": save_sizes(solid, stem, "solid", widths=widths),
+            "cut": save_sizes(cut, stem, "cut", widths=widths),
             "lqip": lqip(solid),
             "width": img.width,
             "height": img.height,
@@ -472,6 +475,8 @@ def check_blank_geometry():
     نسبة للكتاف) كيتبدل من موكاب لموكاب. هاد الفحص كيبين الفرق.
     """
     rows = []
+    # القدّام داخل حتى هو: الطبعة كتتحط بنفس النسب على الجوج، فإلا كان
+    # موكاب قدّام مؤطر بشكل مختلف الطبعة كتجي غالطة على ذاك الوجه وحدو.
     for p in sorted(OUT.glob("blank-*-cut-1080.webp")):
         key = p.stem.replace("blank-", "").replace("-cut-1080", "")
         a = np.asarray(Image.open(p).convert("RGBA"))[..., 3]
