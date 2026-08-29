@@ -398,7 +398,8 @@ export function createCustomSection({ onOrder }) {
             ownFile && picked ? 'custom.ownChange' : 'custom.own'
           )}</span>
         </button>
-      </div>`;
+      </div>
+      <p class="field__note designs__note">${t('custom.fileNote')}</p>`;
 
     el.designs.innerHTML = ownCard + cards;
   }

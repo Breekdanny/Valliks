@@ -156,6 +156,115 @@ export const DESIGNS = [
     tag: { ar: 'جبال · خط', fr: 'Montagnes · Ligne' },
     ...art('peaks'),
   },
+
+  /* ⚠ دفعة 29 غشت. أربعة منهم (`no-risk` · `stay-focused` ·
+     `keep-it-simple` · `just-a-girl`) مرسومين **بأخضر غامق** — كيبانو
+     مزيان على القماش الفاتح وكيختافيو تقريباً على الكحل، وهو اللون
+     الافتراضي. قيسنا مدى الإضاءة ديالهم: 9→37 من 255.
+     ملي تعاود تولّدهم، خرجهم بأخضر ساطع بحال `wolf` — هاداك كيبان ف
+     الجوج. */
+  {
+    id: 'keep-it-simple',
+    category: 'simple',
+    name: { ar: 'KEEP IT SIMPLE', fr: 'KEEP IT SIMPLE' },
+    tag: { ar: 'خط · تاج', fr: 'Lettrage · Couronne' },
+    ...art('keep-it-simple'),
+  },
+  {
+    id: 'no-risk',
+    category: 'quotes',
+    name: { ar: 'NO RISK NO STORY', fr: 'NO RISK NO STORY' },
+    tag: { ar: 'تاج · مقولة', fr: 'Couronne · Citation' },
+    ...art('no-risk'),
+  },
+  {
+    id: 'stay-focused',
+    category: 'quotes',
+    name: { ar: 'STAY FOCUSED', fr: 'STAY FOCUSED' },
+    tag: { ar: 'مونوغرام', fr: 'Monogramme' },
+    ...art('stay-focused'),
+  },
+  {
+    id: 'wolf',
+    category: 'boys',
+    name: { ar: 'WOLF', fr: 'WOLF' },
+    tag: { ar: 'ذيب · نيون', fr: 'Loup · Néon' },
+    ...art('wolf'),
+  },
+  {
+    id: 'crown-bolt',
+    category: 'boys',
+    name: { ar: 'CROWN BOLT', fr: 'CROWN BOLT' },
+    tag: { ar: 'تاج · صاعقة', fr: 'Couronne · Éclair' },
+    ...art('crown-bolt'),
+  },
+  {
+    id: 'just-a-girl',
+    category: 'girls',
+    name: { ar: 'JUST A GIRL', fr: 'JUST A GIRL' },
+    tag: { ar: 'شريطة · خط', fr: 'Nœud · Lettrage' },
+    ...art('just-a-girl'),
+  },
+  {
+    id: 'green-sweater',
+    category: 'girls',
+    name: { ar: 'GREEN MOOD', fr: 'GREEN MOOD' },
+    tag: { ar: 'شريطة · قهوة', fr: 'Nœud · Café' },
+    ...art('green-sweater'),
+  },
+  {
+    id: 'teal-butterfly',
+    category: 'girls',
+    name: { ar: 'TEAL WINGS', fr: 'TEAL WINGS' },
+    tag: { ar: 'فراشة · قلوب', fr: 'Papillon · Cœurs' },
+    ...art('teal-butterfly'),
+  },
+  {
+    id: 'purple-butterfly',
+    category: 'girls',
+    name: { ar: 'PURPLE WINGS', fr: 'PURPLE WINGS' },
+    tag: { ar: 'فراشة · ورود', fr: 'Papillon · Lys' },
+    ...art('purple-butterfly'),
+  },
+
+  /* ✅ هاد الدفعة هي المرجع للجيل الجاي: فيها **أخضر ساطع وأبيض** فوق
+     الأسود، فكتبان مزيان على القماش الفاتح والداكن بحال بحال. الدفعة
+     اللي قبلها كانت أخضر غامق وكتختافى على الكحل. */
+  {
+    id: 'ronin',
+    category: 'anime',
+    name: { ar: 'RONIN', fr: 'RONIN' },
+    tag: { ar: 'كاتانا · غربان', fr: 'Katana · Corbeaux' },
+    ...art('ronin'),
+  },
+  {
+    id: 'dragon-moon',
+    category: 'anime',
+    name: { ar: 'DRAGON MOON', fr: 'DRAGON MOON' },
+    tag: { ar: 'تنين · قمر', fr: 'Dragon · Lune' },
+    ...art('dragon-moon'),
+  },
+  {
+    id: 'gold-wolf',
+    category: 'boys',
+    name: { ar: 'GOLD WOLF', fr: 'GOLD WOLF' },
+    tag: { ar: 'ذيب · ذهبي', fr: 'Loup · Or' },
+    ...art('gold-wolf'),
+  },
+  {
+    id: 'crown-girl',
+    category: 'girls',
+    name: { ar: 'CROWN GIRL', fr: 'CROWN GIRL' },
+    tag: { ar: 'كاسكيطة · فراشات', fr: 'Casquette · Papillons' },
+    ...art('crown-girl'),
+  },
+  {
+    id: 'stay-strong',
+    category: 'girls',
+    name: { ar: 'STAY STRONG', fr: 'STAY STRONG' },
+    tag: { ar: 'فراشات · خط', fr: 'Papillons · Lettrage' },
+    ...art('stay-strong'),
+  },
 ];
 
 /* رسمة بلا فئة معروفة كتضيع ف صمت — الزبون ماكيشوفهاش وماتعرفش علاش.

@@ -26,6 +26,23 @@
     "width": 1004,
     "height": 1536
   },
+  "crown-bolt": {
+    "src": {
+      "600": "/designs/crown-bolt-600.webp",
+      "300": "/designs/crown-bolt-300.webp"
+    },
+    "width": 877,
+    "height": 1220
+  },
+  "crown-girl": {
+    "src": {
+      "900": "/designs/crown-girl-900.webp",
+      "600": "/designs/crown-girl-600.webp",
+      "300": "/designs/crown-girl-300.webp"
+    },
+    "width": 1024,
+    "height": 1536
+  },
   "dark-queen": {
     "src": {
       "900": "/designs/dark-queen-900.webp",
@@ -44,6 +61,15 @@
     "width": 1023,
     "height": 1536
   },
+  "dragon-moon": {
+    "src": {
+      "900": "/designs/dragon-moon-900.webp",
+      "600": "/designs/dragon-moon-600.webp",
+      "300": "/designs/dragon-moon-300.webp"
+    },
+    "width": 1024,
+    "height": 1536
+  },
   "dream-plan-do": {
     "src": {
       "900": "/designs/dream-plan-do-900.webp",
@@ -53,6 +79,24 @@
     "width": 1068,
     "height": 1374
   },
+  "gold-wolf": {
+    "src": {
+      "900": "/designs/gold-wolf-900.webp",
+      "600": "/designs/gold-wolf-600.webp",
+      "300": "/designs/gold-wolf-300.webp"
+    },
+    "width": 1024,
+    "height": 1536
+  },
+  "green-sweater": {
+    "src": {
+      "900": "/designs/green-sweater-900.webp",
+      "600": "/designs/green-sweater-600.webp",
+      "300": "/designs/green-sweater-300.webp"
+    },
+    "width": 1004,
+    "height": 1522
+  },
   "high-roller": {
     "src": {
       "900": "/designs/high-roller-900.webp",
@@ -61,6 +105,33 @@
     },
     "width": 2837,
     "height": 4042
+  },
+  "just-a-girl": {
+    "src": {
+      "900": "/designs/just-a-girl-900.webp",
+      "600": "/designs/just-a-girl-600.webp",
+      "300": "/designs/just-a-girl-300.webp"
+    },
+    "width": 957,
+    "height": 1465
+  },
+  "keep-it-simple": {
+    "src": {
+      "900": "/designs/keep-it-simple-900.webp",
+      "600": "/designs/keep-it-simple-600.webp",
+      "300": "/designs/keep-it-simple-300.webp"
+    },
+    "width": 1465,
+    "height": 987
+  },
+  "no-risk": {
+    "src": {
+      "900": "/designs/no-risk-900.webp",
+      "600": "/designs/no-risk-600.webp",
+      "300": "/designs/no-risk-300.webp"
+    },
+    "width": 1509,
+    "height": 1024
   },
   "outlaw": {
     "src": {
@@ -80,6 +151,24 @@
     "width": 1277,
     "height": 947
   },
+  "purple-butterfly": {
+    "src": {
+      "900": "/designs/purple-butterfly-900.webp",
+      "600": "/designs/purple-butterfly-600.webp",
+      "300": "/designs/purple-butterfly-300.webp"
+    },
+    "width": 967,
+    "height": 1536
+  },
+  "ronin": {
+    "src": {
+      "900": "/designs/ronin-900.webp",
+      "600": "/designs/ronin-600.webp",
+      "300": "/designs/ronin-300.webp"
+    },
+    "width": 1024,
+    "height": 1536
+  },
   "speed-demon": {
     "src": {
       "900": "/designs/speed-demon-900.webp",
@@ -89,6 +178,15 @@
     "width": 3539,
     "height": 4192
   },
+  "stay-focused": {
+    "src": {
+      "900": "/designs/stay-focused-900.webp",
+      "600": "/designs/stay-focused-600.webp",
+      "300": "/designs/stay-focused-300.webp"
+    },
+    "width": 924,
+    "height": 912
+  },
   "stay-positive": {
     "src": {
       "900": "/designs/stay-positive-900.webp",
@@ -97,6 +195,24 @@
     },
     "width": 1186,
     "height": 1261
+  },
+  "stay-strong": {
+    "src": {
+      "900": "/designs/stay-strong-900.webp",
+      "600": "/designs/stay-strong-600.webp",
+      "300": "/designs/stay-strong-300.webp"
+    },
+    "width": 1008,
+    "height": 1536
+  },
+  "teal-butterfly": {
+    "src": {
+      "900": "/designs/teal-butterfly-900.webp",
+      "600": "/designs/teal-butterfly-600.webp",
+      "300": "/designs/teal-butterfly-300.webp"
+    },
+    "width": 963,
+    "height": 1536
   },
   "total-strike": {
     "src": {
@@ -124,5 +240,14 @@
     },
     "width": 1222,
     "height": 1269
+  },
+  "wolf": {
+    "src": {
+      "900": "/designs/wolf-900.webp",
+      "600": "/designs/wolf-600.webp",
+      "300": "/designs/wolf-300.webp"
+    },
+    "width": 1383,
+    "height": 1024
   }
 }
