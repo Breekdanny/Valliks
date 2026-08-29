@@ -86,8 +86,8 @@ function shot(stem) {
 
 /* الألوان. قيم hex مقيسة من بيكسل القماش الحقيقي ف كل موكاب — ماشي بالعين —
    باش النقطة الملونة ف البطاقة تطابق التيشيرت بالضبط. */
-const BLACK = { key: 'black', ar: 'كحل', fr: 'Noir', hex: '#131315' };
-const WHITE = { key: 'white', ar: 'بيض', fr: 'Blanc', hex: '#eeece5' };
+const BLACK = { key: 'black', ar: 'كحل', fr: 'Noir', hex: '#131313' };
+const WHITE = { key: 'white', ar: 'بيض', fr: 'Blanc', hex: '#e2e3e3' };
 
 /* ألوان التيشيرت الخاوي (قسم "صمم ديالك"). الهيكس مقيس من وسط الجذع ف
    كل موكاب — ماشي بالعين.

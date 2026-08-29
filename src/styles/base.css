@@ -203,8 +203,12 @@ html[lang='ar'] .btn { text-transform: none; letter-spacing: 0; }
 .btn--royal { --btn-bg: var(--royal); --btn-fg: #fff; }
 .btn--royal:hover { box-shadow: 0 10px 30px -8px rgba(36, 71, 232, 0.6); }
 
-.btn--wa { --btn-bg: #1faf54; --btn-fg: #fff; }
-.btn--wa:hover { box-shadow: 0 10px 30px -8px rgba(31, 175, 84, 0.55); }
+/* أخضر واتساب معتّم باش نص أبيض يعدي التباين.
+   الأصلي #25d366 كيعطي 2.1:1 مع أبيض، و#1faf54 اللي كان هنا 2.87:1 —
+   والأزرار نصها 12→15px عريض، يعني كتحتاج **4.5:1** ماشي 3.0.
+   #17843f = 4.76:1، وباقي كيتعرف كأخضر واتساب. */
+.btn--wa { --btn-bg: #17843f; --btn-fg: #fff; }
+.btn--wa:hover { box-shadow: 0 10px 30px -8px rgba(23, 132, 63, 0.55); }
 
 .btn--lg { padding: 1.1em 2.2em; font-size: 0.95rem; }
 .btn--block { inline-size: 100%; }

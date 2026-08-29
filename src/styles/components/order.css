@@ -92,6 +92,15 @@
   align-content: start;
 }
 
+/* زر تحميل المعاينة — كيبان غير ف الطلب المخصص */
+.modal__save {
+  justify-self: start;
+  margin-block-start: 0.6rem;
+  font-size: var(--t-xs);
+  padding: 0.6em 1.1em;
+}
+.modal__save[hidden] { display: none; }
+
 .field { display: grid; gap: 0.4rem; }
 
 /* ⚠ ضروري. المتصفح عندو `[hidden] { display: none }` ف ستايلو الافتراضي،

@@ -47,6 +47,8 @@ export function buildMessage(o) {
         place: 'الموضع',
         cm: 'سم',
         attachHead: 'مهم',
+        preview:
+          'لصق صورة المعاينة ف هاد المحادثة (كاين زر «حمّل صورة المعاينة» ف صفحة الطلب) — بيها كنشوفو بالضبط فين وشحال من الطبعة.',
         attach:
           'لصق الصورة ديال الديزاين ف هاد المحادثة قبل ما تصيفط الرسالة — بلاها ماغاديش نقدرو نطبعو الطلب.',
         attachMany: (n) =>
@@ -76,6 +78,8 @@ export function buildMessage(o) {
         place: 'Emplacement',
         cm: 'cm',
         attachHead: 'Important',
+        preview:
+          "Joignez l'aperçu dans cette conversation (bouton « Enregistrer l'aperçu » sur la page de commande) — il nous montre exactement la taille et l'emplacement.",
         attach:
           "Joignez l'image de votre design dans cette conversation avant d'envoyer — sans elle, on ne peut pas lancer l'impression.",
         attachMany: (n) =>
@@ -138,9 +142,14 @@ export function buildMessage(o) {
   // رابط wa.me كيحمل نص فقط، فماكاينش طريقة نلصقو الصورة نيابة عليه.
   // ⚠ العدد مهم: وجهين بديزاين ديال الزبون = **جوج ملفات**، وبلا ما نقولوها
   // الزبون كيلصق وحدة وكيظن أنه سالا.
-  if (o.ownDesign) {
-    const n = o.ownCount ?? 1;
-    lines.push('', `*⚠ ${L.attachHead}*`, n > 1 ? L.attachMany(n) : L.attach);
+  if (o.sides?.length) {
+    lines.push('', `*⚠ ${L.attachHead}*`);
+    // المعاينة أول حاجة: هي اللي كتوري الحجم والموضع بلا تخمين.
+    lines.push(L.preview);
+    if (o.ownDesign) {
+      const n = o.ownCount ?? 1;
+      lines.push('', n > 1 ? L.attachMany(n) : L.attach);
+    }
   }
 
   return lines.join('\n');

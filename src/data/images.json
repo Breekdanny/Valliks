@@ -1,4 +1,15 @@
 {
+  "blank-black-front": {
+    "solid": {
+      "1080": "/products/blank-black-front-solid-1080.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-black-front-cut-1080.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwBACdASoYABgAPt1WpU2opKOiN/qoARAbiWcAx+Qh38dANWTBmGa3OfHiyJSVOqAA/uXeY8p3bPeETZYj2k4ii0IuOhYv831KY5+lUDz6UKTbpgA=",
+    "width": 2200,
+    "height": 2200
+  },
   "blank-black": {
     "solid": {
       "1080": "/products/blank-black-solid-1080.webp",
@@ -10,9 +21,9 @@
       "720": "/products/blank-black-cut-720.webp",
       "480": "/products/blank-black-cut-480.webp"
     },
-    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADwBACdASoYABgAPt1UpE2opKOiN/qoARAbiWcAx+Qh38c6Ul+ZU2VqeCB/kULp7AAA/uXeY8p9mpmLbueaRiLqaIoTTKN0E0/gH6U9b+LTN09DTHQAAA==",
-    "width": 1080,
-    "height": 1080
+    "lqip": "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAADQBACdASoYABgAPt1WpU2opKOiN/qoARAbiWcAxNgh38c6Ul+ZU2Vqa2Xe7WkvMAD+5d5jyn2amYrNdexF4nKIV2YdG6lAtRuYJKN/DnaDcgkRyYAAAA==",
+    "width": 2200,
+    "height": 2200
   },
   "blank-grey-front": {
     "solid": {
@@ -92,6 +103,17 @@
     "width": 2200,
     "height": 2200
   },
+  "blank-white-front": {
+    "solid": {
+      "1080": "/products/blank-white-front-solid-1080.webp"
+    },
+    "cut": {
+      "1080": "/products/blank-white-front-cut-1080.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAQBQCdASoYABgAPu1uslCppqUisBgIATAdiWcAx+QQ7+fcNx9P9TO7TsW4As3uRpoAAP7cw7yx3/fOEIOnk0fSZQZUtbgk9c756qYzs5dPdRFQtAJK+hS0IST0cUR6TcAAAA==",
+    "width": 2200,
+    "height": 2200
+  },
   "blank-white": {
     "solid": {
       "1080": "/products/blank-white-solid-1080.webp",
@@ -103,9 +125,9 @@
       "720": "/products/blank-white-cut-720.webp",
       "480": "/products/blank-white-cut-480.webp"
     },
-    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADwBACdASoYABgAPu1urU2pp6SiMAgBMB2JZwC+SCHf3N7pa/ZwXJPuw1JYquaTDAAA/tzHLGoVSrG7VGDmHNL9KcJhUirEZRXPOyD52pAdJOE1aF78PsR01rjP2TmwAAA=",
-    "width": 1080,
-    "height": 1080
+    "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQBQCdASoYABgAPu1qrU8ppiQiMAgBMB2JZwDG9CHf3Xn7Qxr24y3mj4rFukeKw8AgAP7cw7yx3/eOpfStVUqQh7BI46yUe6Lk2gQVI3TggSIEwBMyxZ7FXFHCkSkAAAA=",
+    "width": 2200,
+    "height": 2200
   },
   "high-roller-black": {
     "solid": {

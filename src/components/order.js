@@ -25,6 +25,7 @@ export function createOrderModal() {
     desc: document.getElementById('modalDesc'),
     ref: document.getElementById('modalRef'),
     form: document.getElementById('orderForm'),
+    save: document.getElementById('modalSave'),
     colorChips: document.getElementById('colorChips'),
     sizeChips: document.getElementById('sizeChips'),
     fColor: document.getElementById('fColor'),
@@ -92,6 +93,33 @@ export function createOrderModal() {
       .join('');
   }
 
+  /**
+   * رابط تحميل المعاينة.
+   *
+   * ⚠ Blob وماشي الـdata URL مباشرة: المعاينة ديال وجهين كتوصل ~2 MB،
+   * و`href` بهاد الطول كيفشل ف تحميل Safari وكيثقل الـDOM. وكنحررو الرابط
+   * القديم — بلاها كل فتح ديال النافذة كيسرب ذاكرة.
+   */
+  let saveUrl = null;
+  function setSaveLink(dataUrl) {
+    if (saveUrl) URL.revokeObjectURL(saveUrl);
+    saveUrl = null;
+    if (!dataUrl) {
+      el.save.hidden = true;
+      el.save.removeAttribute('href');
+      return;
+    }
+    const [head, b64] = dataUrl.split(',');
+    const mime = head.match(/:(.*?);/)?.[1] ?? 'image/webp';
+    const bin = atob(b64);
+    const buf = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    saveUrl = URL.createObjectURL(new Blob([buf], { type: mime }));
+    el.save.href = saveUrl;
+    el.save.download = `${ref}.${mime.split('/')[1] || 'webp'}`;
+    el.save.hidden = false;
+  }
+
   function paintProduct() {
     const v = product.variants[variant];
 
@@ -100,9 +128,11 @@ export function createOrderModal() {
     if (extra.preview) {
       el.img.removeAttribute('srcset');
       el.img.src = extra.preview;
+      setSaveLink(extra.preview);
     } else {
       el.img.src = v.solid;
       el.img.srcset = v.solidSrcset;
+      setSaveLink(null);
     }
     el.img.alt = `${pick(product.name)} — ${pick(v)}`;
     el.title.textContent = pick(product.name);

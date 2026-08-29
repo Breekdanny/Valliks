@@ -164,6 +164,7 @@ export const ar = {
   'order.hint': 'غادي يتحل واتساب بالرسالة معمّرة — غير صيفطها.',
   'order.pickSize': 'اختار القياس',
   'order.ref': 'رقم الطلب',
+  'order.savePreview': 'حمّل صورة المعاينة',
   'order.close': 'سد',
 
   'err.name': 'كتب السمية ديالك (على الأقل حرفين).',
@@ -339,6 +340,7 @@ export const fr = {
   'order.hint': "WhatsApp s'ouvre avec le message déjà écrit — vous n'avez qu'à envoyer.",
   'order.pickSize': 'Choisissez la taille',
   'order.ref': 'N° de commande',
+  'order.savePreview': "Enregistrer l'aperçu",
   'order.close': 'Fermer',
 
   'err.name': 'Écrivez votre nom (2 caractères minimum).',
