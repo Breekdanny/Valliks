@@ -159,6 +159,8 @@ html[dir='rtl'] .field input[type='tel'] { text-align: right; }
 /* ---------- اختيار القياس ---------- */
 
 .chips { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+/* شيبات التيشيرتات: سميات طويلة، فماخاصهاش عرض أدنى ديال القياسات */
+.chips--wrap .chip { min-inline-size: 0; }
 .chip {
   min-inline-size: 52px;
   padding: 0.6rem 0.8rem;
@@ -207,6 +209,54 @@ html[dir='rtl'] .field input[type='tel'] { text-align: right; }
   font-variant-numeric: tabular-nums;
 }
 
+/* ---------- السلة ---------- */
+
+.cart { display: grid; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.cart__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--sunken);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  font-size: var(--t-sm);
+}
+.cart__name { font-weight: 800; color: var(--text); }
+/* السطر كيتقلص من هنا: السمية والزر ديما كاملين */
+.cart__meta {
+  flex: 1;
+  min-inline-size: 0;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cart__save {
+  color: var(--gold);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+.cart__rm {
+  flex: none;
+  inline-size: 28px;
+  block-size: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.cart__rm:hover { background: rgb(220 60 60 / 0.15); color: #e05555; }
+
+#cartAdd:disabled { opacity: 0.45; cursor: not-allowed; }
+
 /* ---------- الفاتورة ---------- */
 
 .bill {
@@ -229,6 +279,15 @@ html[dir='rtl'] .field input[type='tel'] { text-align: right; }
 }
 .bill__row--total span:last-child { color: var(--gold); }
 .bill__free { color: #4ec97a; font-weight: 700; }
+.bill__nudge {
+  margin: 0;
+  padding-block-start: 0.5rem;
+  border-block-start: 1px dashed var(--line-soft);
+  color: var(--gold);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  text-align: center;
+}
 
 .modal__hint {
   font-size: var(--t-xs);

@@ -39,7 +39,6 @@ export function buildMessage(o) {
     ? {
         head: 'طلب جديد من الموقع',
         ref: 'رقم الطلب',
-        product: 'المنتج',
         color: 'اللون',
         size: 'القياس',
         design: 'الديزاين',
@@ -54,11 +53,12 @@ export function buildMessage(o) {
         attachMany: (n) =>
           `لصق **${n}** صور ديال الديزاين ف هاد المحادثة قبل ما تصيفط الرسالة — وحدة لكل وجه. بلاهم ماغاديش نقدرو نطبعو الطلب.`,
         qty: 'الكمية',
-        unit: 'الثمن',
         sub: 'المجموع',
         ship: 'التوصيل',
         total: 'الإجمالي',
-        free: 'مجاني',
+        free: 'مجاني (داخل ف الثمن)',
+        printed: (n) => `${n} مطبوع${n > 1 ? 'ين' : ''} — عرض الحزمة`,
+        blanks: (n) => `${n} خاوي${n > 1 ? 'ين' : ''}`,
         who: 'معلومات الزبون',
         name: 'الاسم',
         phone: 'التيليفون',
@@ -70,7 +70,6 @@ export function buildMessage(o) {
     : {
         head: 'Nouvelle commande du site',
         ref: 'N° commande',
-        product: 'Produit',
         color: 'Couleur',
         size: 'Taille',
         design: 'Design',
@@ -85,11 +84,12 @@ export function buildMessage(o) {
         attachMany: (n) =>
           `Joignez **${n}** images dans cette conversation avant d'envoyer — une par face. Sans elles, on ne peut pas lancer l'impression.`,
         qty: 'Quantité',
-        unit: 'Prix',
         sub: 'Sous-total',
         ship: 'Livraison',
         total: 'Total',
-        free: 'Offerte',
+        free: 'Offerte (incluse dans le prix)',
+        printed: (n) => `${n} imprimé${n > 1 ? 's' : ''} — offre lot`,
+        blanks: (n) => `${n} uni${n > 1 ? 's' : ''}`,
         who: 'Informations client',
         name: 'Nom',
         phone: 'Téléphone',
@@ -100,31 +100,40 @@ export function buildMessage(o) {
       };
 
   const money = (n) => `${n} ${cur}`;
+  const items = o.items ?? [];
+  const many = items.length > 1;
+
   const lines = [
     `*${L.head} — VALLIKS*`,
     `${L.ref}: ${o.ref}`,
-    '',
-    `*${L.product}:* ${o.product}`,
-    `${L.color}: ${o.color}`,
-    `${L.size}: ${o.size}`,
   ];
 
-  /* الطلب المخصص كيزيد كتلة **لكل وجه** معمّر. الوجه الخاوي ماكيتذكرش —
-     ورشة الطباعة خاصها تعرف بالضبط شنو تطبع وفين، بلا تخمين.
-     الطلبات العادية (o.sides خاوي) ماكيتبدل فيهم والو. */
-  for (const s of o.sides ?? []) {
-    lines.push('', `*${s.side}*`);
-    if (s.design) lines.push(`${L.design}: ${s.design}`);
-    if (s.printCm) lines.push(`${L.print}: ${s.printCm} ${L.cm}`);
-    if (s.placement) lines.push(`${L.place}: ${s.placement}`);
-  }
-  if (o.sides?.length) lines.push('');
+  /* كل تيشيرت كتلة بوحدو. كنرقموهم غير ملي يكونو أكثر من واحد — الطلب ديال
+     تيشيرت واحد خاصو يبقى قصير بحال قبل. */
+  items.forEach((it, i) => {
+    lines.push('', `*${many ? `${i + 1}. ` : ''}${it.product}*`);
+    if (it.color) lines.push(`${L.color}: ${it.color}`);
+    lines.push(`${L.size}: ${it.size}`);
+    if (it.qty > 1) lines.push(`${L.qty}: ${it.qty}`);
+
+    /* الطلب المخصص كيزيد كتلة **لكل وجه** معمّر. الوجه الخاوي ماكيتذكرش —
+       ورشة الطباعة خاصها تعرف بالضبط شنو تطبع وفين، بلا تخمين. */
+    for (const s of it.sides ?? []) {
+      lines.push(`  *${s.side}*`);
+      if (s.design) lines.push(`  ${L.design}: ${s.design}`);
+      if (s.printCm) lines.push(`  ${L.print}: ${s.printCm} ${L.cm}`);
+      if (s.placement) lines.push(`  ${L.place}: ${s.placement}`);
+    }
+  });
+
+  /* التفصيل كيوري لصاحب المتجر علاش المجموع هو هاداك: المطبوعين بعرض الحزمة
+     والخاويين بالوحدة. بلاه كيبقى يحسب بيدو ف كل طلب. */
+  const bd = o.breakdown ?? {};
+  lines.push('', `${L.sub}: ${money(o.itemsTotal)}`);
+  if (bd.printed) lines.push(`  ${L.printed(bd.printed)}: ${money(bd.printedTotal)}`);
+  if (bd.blanks) lines.push(`  ${L.blanks(bd.blanks)}: ${money(bd.blanksTotal)}`);
 
   lines.push(
-    `${L.qty}: ${o.qty}`,
-    `${L.unit}: ${money(o.unitPrice)}`,
-    '',
-    `${L.sub}: ${money(o.subtotal)}`,
     `${L.ship}: ${o.shipping === 0 ? L.free : money(o.shipping)}`,
     `*${L.total}: ${money(o.total)}*`,
     '',
@@ -141,14 +150,18 @@ export function buildMessage(o) {
   // التذكير آخر حاجة ف الرسالة عن قصد — هو آخر شي كيقرا الزبون قبل ما يصيفط.
   // رابط wa.me كيحمل نص فقط، فماكاينش طريقة نلصقو الصورة نيابة عليه.
   // ⚠ العدد مهم: وجهين بديزاين ديال الزبون = **جوج ملفات**، وبلا ما نقولوها
-  // الزبون كيلصق وحدة وكيظن أنه سالا.
-  if (o.sides?.length) {
+  // الزبون كيلصق وحدة وكيظن أنه سالا. مع السلة العدد كيتجمع على كل التيشيرتات.
+  const withSides = items.filter((it) => it.sides?.length);
+  const ownTotal = items.reduce(
+    (n, it) => n + (it.ownDesign ? it.ownCount || 1 : 0),
+    0
+  );
+  if (withSides.length) {
     lines.push('', `*⚠ ${L.attachHead}*`);
     // المعاينة أول حاجة: هي اللي كتوري الحجم والموضع بلا تخمين.
     lines.push(L.preview);
-    if (o.ownDesign) {
-      const n = o.ownCount ?? 1;
-      lines.push('', n > 1 ? L.attachMany(n) : L.attach);
+    if (ownTotal > 0) {
+      lines.push('', ownTotal > 1 ? L.attachMany(ownTotal) : L.attach);
     }
   }
 

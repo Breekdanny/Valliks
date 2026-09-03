@@ -297,6 +297,12 @@ html[lang='ar'] .hero__tag { text-transform: none; letter-spacing: 0.03em; }
 .stage__dot[aria-current='true'] { background: var(--gold); transform: scaleY(2); }
 .stage__dot:hover { background: var(--gold-lit); }
 
+/* زر اللور/القدّام تحت الفيترينة. `justify-self` حيت الأب grid. */
+.stage__face {
+  justify-self: center;
+  margin-block-start: 1.1rem;
+}
+
 .stage__hint {
   display: inline-flex;
   align-items: center;

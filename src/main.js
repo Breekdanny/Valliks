@@ -84,6 +84,38 @@ dots.addEventListener('click', (e) => {
   if (btn) carousel.goTo([...dots.children].indexOf(btn));
 });
 
+/* ---------- 4b. زر اللور/القدّام ----------
+   كنبدلو `src` ديال الصور ف بلاصتهم عوض ما نعاودو بناء الكاروسيل — بلا
+   هادشي الزاوية الحالية والدوران كيتصفرو تحت رجلين الزائر.
+
+   الزر كيبان غير إلا كان عند شي منتج موكاب قدّام. ماكاين علاش يبان زر
+   كيبدل لنفس الصورة. */
+const face = $('stageFace');
+let side = 'back';
+
+function paintFace() {
+  [...ring.children].forEach((slide, i) => {
+    const v = PRODUCTS[i].variants[0];
+    // اللون اللي ماعندوش قدّام كيبقى على اللور — ماشي صورة خاوية
+    const view = side === 'front' && v.front ? v.front : v;
+    const img = slide.querySelector('img');
+    img.src = view.cut;
+    img.srcset = view.cutSrcset;
+  });
+  [...face.children].forEach((b) =>
+    b.setAttribute('aria-selected', String(b.dataset.side === side))
+  );
+}
+
+face.hidden = !PRODUCTS.some((p) => p.variants[0].front);
+
+face.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-side]');
+  if (!btn || btn.dataset.side === side) return;
+  side = btn.dataset.side;
+  paintFace();
+});
+
 /* التلميح كيتبدل حسب الجهاز: "سحب" ف الحاسوب، "سويب" ف الهاتف */
 if (matchMedia('(hover: none)').matches) {
   hint.querySelector('span').dataset.i18n = 'hero.swipe';
@@ -108,8 +140,10 @@ function paintLinks() {
   $('waHeader').href = url;
   $('waFooter').href = url;
 
-  const socials = $('socials');
-  socials.innerHTML = '';
+  // نفس الأيقونات ف الهيدر وف الفوتر — مصدر واحد، فماكاينش خطر أن وحدة
+  // تتحدث والأخرى لا.
+  const boxes = [$('socialsHeader'), $('socials')].filter(Boolean);
+  boxes.forEach((b) => (b.innerHTML = ''));
 
   /* تدرج إنستغرام الرسمي. الأيقونة كتاخدو بـfill="url(#igGrad)" عوض
      currentColor — CSS ماكيقدرش يحط تدرج على مسار SVG، خاص يكون جوا الملف.
@@ -131,16 +165,22 @@ function paintLinks() {
   nets.forEach(([name, href, path]) => {
     if (!href) return;                 // ماكاينش الرابط → ماكايناش الأيقونة
     const ig = name === 'instagram';
-    const a = document.createElement('a');
-    a.className = `icon-btn icon-btn--brand icon-btn--${ig ? 'ig' : name}`;
-    a.href = href;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.setAttribute('aria-label', name);
-    a.innerHTML =
-      `<svg viewBox="0 0 24 24" aria-hidden="true">${ig ? IG_GRAD : ''}` +
-      `<path fill="${ig ? 'url(#igGrad)' : 'currentColor'}" d="${path}"/></svg>`;
-    socials.append(a);
+    boxes.forEach((box, i) => {
+      const a = document.createElement('a');
+      a.className = `icon-btn icon-btn--brand icon-btn--${ig ? 'ig' : name}`;
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.setAttribute('aria-label', name);
+      // ⚠ معرّف التدرج خاصو يكون فريد ف كل نسخة. لو تكرر نفس الـid ف
+      // الصفحة، المتصفح كياخد الأول وحدو — والثاني كيبقى بلا لون.
+      const gid = `igGrad${i}`;
+      a.innerHTML =
+        `<svg viewBox="0 0 24 24" aria-hidden="true">` +
+        `${ig ? IG_GRAD.replaceAll('igGrad', gid) : ''}` +
+        `<path fill="${ig ? `url(#${gid})` : 'currentColor'}" d="${path}"/></svg>`;
+      box.append(a);
+    });
   });
 }
 paintLinks();

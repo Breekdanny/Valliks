@@ -26,7 +26,7 @@ export const ar = {
   'hero.line2': 'تيشيرت',
   'hero.line3': 'عادي',
   'hero.sub':
-    'خمسة ديزاينات، كل واحد مرسوم من الصفر ومطبوع هنا. قماش ثقيل، قصة أوفرسايز، وطبعة كتبقى بعد الغسيل.',
+    'خمسة ديزاينات، كل واحد مرسوم من الصفر ومطبوع هنا. قماش ثقيل وقصة أوفرسايز.',
   'hero.cta': 'شوف المجموعة',
   'hero.ctaAlt': 'طلب عبر واتساب',
   'hero.drag': 'سحب باش تدور',
@@ -136,9 +136,6 @@ export const ar = {
   'faq.q4': 'واش نقدر نبدل ولا نرجع؟',
   'faq.a4':
     'أيوا، خلال 48 ساعة من الاستلام، بشرط التيشيرت مايكونش تلبس ولا تغسل والباكية تبقى سليمة. عيط لينا ف واتساب وكنرتبو معاك. تكاليف الرجوع على الزبون إلا كان القياس غالط، وعلينا حنا إلا كان الغلط ديالنا.',
-  'faq.q5': 'كيفاش نغسلو باش الطبعة ماتخربش؟',
-  'faq.a5':
-    'اقلبو من الداخل قبل الغسيل، ماء بارد 30 درجة، بلا جافيل. ماتحطش الحديدة مباشرة على الطبعة — حديدو من الداخل ولا حط شي توب فوقها.',
 
   'order.title': 'طلب',
   'order.step1': 'المنتج',
@@ -165,7 +162,14 @@ export const ar = {
   'order.pickSize': 'اختار القياس',
   'order.ref': 'رقم الطلب',
   'order.savePreview': 'حمّل صورة المعاينة',
+  'order.savePreviewShort': 'المعاينة',
   'order.close': 'سد',
+  'order.product': 'التيشيرت',
+  'order.addMore': 'زيد هادا وكمل بواحد آخر',
+  'order.cart': 'الطلب ديالك',
+  'order.remove': 'حيد',
+  // {price} = ثمن التيشيرت الزايد · {total} = الإجمالي الجديد
+  'order.nudge': 'زيد تيشيرت آخر بـ{price} برك — الطلب كيولي {total}.',
 
   'err.name': 'كتب السمية ديالك (على الأقل حرفين).',
   'err.phone': 'رقم غالط. خاصو يبدا بـ 06 ولا 07 ولا 05 ويكون فيه 10 أرقام.',
@@ -204,7 +208,7 @@ export const fr = {
   'hero.line2': 'T-shirt',
   'hero.line3': 'ordinaire',
   'hero.sub':
-    "Cinq designs, chacun dessiné de zéro et imprimé ici. Coton lourd, coupe oversize, et une impression qui tient au lavage.",
+    "Cinq designs, chacun dessiné de zéro et imprimé ici. Coton lourd et coupe oversize.",
   'hero.cta': 'Voir la collection',
   'hero.ctaAlt': 'Commander sur WhatsApp',
   'hero.drag': 'Glissez pour tourner',
@@ -312,9 +316,6 @@ export const fr = {
   'faq.q4': 'Puis-je échanger ou retourner ?',
   'faq.a4':
     "Oui, sous 48 h après réception, à condition que le t-shirt n'ait été ni porté ni lavé et que l'emballage soit intact. Écrivez-nous sur WhatsApp et on organise. Les frais de retour sont à votre charge si c'est une erreur de taille, et à la nôtre si l'erreur vient de nous.",
-  'faq.q5': 'Comment le laver sans abîmer l\'impression ?',
-  'faq.a5':
-    "Retournez-le sur l'envers avant lavage, eau froide à 30°, sans javel. Ne repassez jamais directement sur l'impression — repassez sur l'envers ou posez un tissu par-dessus.",
 
   'order.title': 'Commande',
   'order.step1': 'Produit',
@@ -341,7 +342,13 @@ export const fr = {
   'order.pickSize': 'Choisissez la taille',
   'order.ref': 'N° de commande',
   'order.savePreview': "Enregistrer l'aperçu",
+  'order.savePreviewShort': 'Aperçu',
   'order.close': 'Fermer',
+  'order.product': 'Le t-shirt',
+  'order.addMore': 'Ajouter celui-ci et en choisir un autre',
+  'order.cart': 'Votre commande',
+  'order.remove': 'Retirer',
+  'order.nudge': 'Un t-shirt de plus pour {price} seulement — total {total}.',
 
   'err.name': 'Écrivez votre nom (2 caractères minimum).',
   'err.phone': 'Numéro invalide. Il doit commencer par 05, 06 ou 07 et faire 10 chiffres.',

@@ -55,6 +55,9 @@
       <div class="header__tools">
         <button class="icon-btn lang-btn" id="langBtn" data-i18n="nav.lang"
                 data-i18n-aria="nav.langLabel" aria-label="بدل للفرنسية">FR</button>
+        <!-- إنستغرام وتيكتوك — كيتعمرو من SHOP ف products.js. الشبكة اللي
+             ماعندهاش رابط ماكتبانش. واتساب كيبقى آخر واحد: هو زر الطلب. -->
+        <div class="socials socials--header" id="socialsHeader"></div>
         <a class="icon-btn icon-btn--brand icon-btn--wa" id="waHeader" href="#" target="_blank" rel="noopener"
            data-i18n-aria="footer.wa" aria-label="واتساب">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -89,6 +92,16 @@
              aria-roledescription="عرض دوار للمنتوجات" aria-label="المجموعة">
           <div class="ring" id="ring"></div>
           <div class="stage__dots" id="dots" role="tablist"></div>
+        </div>
+
+        <!-- زر اللور/القدّام. `hidden` من البداية: main.js كيبينو غير إلا
+             كان عند شي منتج موكاب قدّام ف images.json. -->
+        <div class="chips sides stage__face" id="stageFace" role="tablist" hidden
+             data-i18n-aria="custom.sidesLabel" aria-label="وجه التيشيرت">
+          <button class="chip sides__tab" type="button" role="tab" data-side="back"
+                  aria-selected="true" data-i18n="custom.back">اللور</button>
+          <button class="chip sides__tab" type="button" role="tab" data-side="front"
+                  aria-selected="false" data-i18n="custom.front">القدّام</button>
         </div>
 
         <p class="stage__hint" id="stageHint">
@@ -354,13 +367,6 @@
               القياس غالط، وعلينا حنا إلا كان الغلط ديالنا.
             </p>
           </details>
-          <details>
-            <summary data-i18n="faq.q5">كيفاش نغسلو باش الطبعة ماتخربش؟</summary>
-            <p data-i18n="faq.a5">
-              اقلبو من الداخل قبل الغسيل، ماء بارد 30 درجة، بلا جافيل. ماتحطش الحديدة مباشرة
-              على الطبعة — حديدو من الداخل ولا حط شي توب فوقها.
-            </p>
-          </details>
         </div>
       </div>
     </section>
@@ -435,6 +441,14 @@
       </div>
 
       <form class="modal__form" id="orderForm" novalidate>
+        <!-- بدال التيشيرت بلا ما تسد النافذة — هو اللي كيخلي الزبون يزيد
+             ديزاين آخر للطلب. الطلب المخصص ماكيبانش هنا: كيجي من قسم
+             "صمم ديالك" بمعاينة ديالو. -->
+        <div class="field" id="fProduct">
+          <label data-i18n="order.product">التيشيرت</label>
+          <div class="chips chips--wrap" id="productChips"></div>
+        </div>
+
         <div class="field" id="fColor">
           <label data-i18n="order.color">اللون</label>
           <div class="chips" id="colorChips"></div>
@@ -453,6 +467,16 @@
             <output id="qtyOut">1</output>
             <button type="button" id="qtyPlus" aria-label="زيد">+</button>
           </div>
+        </div>
+
+        <!-- الزبون ماخاصوش يكليكي هنا باش يطلب واحد: ملي يصيفط الطلب،
+             التيشيرت اللي معمّر دابا كيتزاد وحدو. الزر هو غير للي باغي جوج. -->
+        <button class="btn btn--ghost btn--block" type="button" id="cartAdd"
+                data-i18n="order.addMore">زيد هادا وكمل بواحد آخر</button>
+
+        <div class="field" id="fCart" hidden>
+          <label data-i18n="order.cart">الطلب ديالك</label>
+          <ul class="cart" id="cartList"></ul>
         </div>
 
         <div class="row">
@@ -498,6 +522,8 @@
           <div class="bill__row bill__row--total">
             <span data-i18n="order.total">الإجمالي</span><span id="billTotal"></span>
           </div>
+          <!-- كيبان غير ملي تكون الحزمة الجاية كتربح فلوس للزبون -->
+          <p class="bill__nudge" id="billNudge" hidden></p>
         </div>
 
         <button class="btn btn--wa btn--block btn--lg" type="submit" data-i18n="order.submit">

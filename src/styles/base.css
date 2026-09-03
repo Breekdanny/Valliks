@@ -405,6 +405,8 @@ html[lang='ar'] .footer h3 { text-transform: none; letter-spacing: 0.04em; }
 }
 
 .socials { display: flex; gap: 0.5rem; margin-block-start: 1.25rem; }
+/* ف الهيدر كتمشي مع باقي الأزرار — بلا هامش فوقاني */
+.socials--header { margin-block-start: 0; }
 
 /* ---------- الظهور عند التمرير ---------- */
 

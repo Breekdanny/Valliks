@@ -13,18 +13,46 @@ export const SHOP = {
   whatsapp: '212675957090',
 
   instagram: 'https://www.instagram.com/valliks_shop',
-  // TODO: زيد رابط تيكتوك إلا كان عندك — خليه فارغ والأيقونة كتختافى وحدها
-  tiktok: '',
+  // الرابط اللي جا من المشاركة كان فيه `?_r=1&_t=ZN-...` — هادو رموز
+  // جلسة مؤقتة كينتهي مفعولها. رابط البروفايل النظيف كيخدم للأبد.
+  tiktok: 'https://www.tiktok.com/@valliks.com',
 
   currency: { ar: 'د.م', fr: 'DH' },
-
-  // TODO: تحقق من ثمن التوصيل الحقيقي مع الشركة اللي كتخدم معاها
-  freeShippingAbove: 400,
 };
 
 /* --------------------------------------------------------------------------
-   المدن وأثمنة التوصيل
-   TODO: راجع الأثمنة مع شركة التوصيل ديالك — هادو تقديرات السوق
+   الأثمنة — **التوصيل داخل ف كل ثمن**. ماكاينش سطر توصيل كيتزاد للزبون.
+
+   الحزمة كتتحسب على عدد التيشيرتات **المطبوعة** (الجاهزين + المخصص):
+     1 → 224 · 2 → 400 · 3 → 550 · وكل واحد زايد فوق 3 → +200
+
+   الخاوي خارج الحزمة وعندو ثمنو ديالو — هو المنتج الرخيص اللي كيدخل الناس.
+   طلب فيه 2 مطبوعين + خاوي = 400 + 129 = 529.
+   -------------------------------------------------------------------------- */
+export const PRICING = {
+  tiers: [224, 400, 550],
+  extra: 200,
+  blank: 129,
+};
+
+/** ثمن n تيشيرت مطبوع. الخاويين ماكيدخلوش هنا — كيتزادو بثمنهم لبرا. */
+export function bundlePrice(n) {
+  if (n <= 0) return 0;
+  const { tiers, extra } = PRICING;
+  const last = tiers.length;
+  return n <= last ? tiers[n - 1] : tiers[last - 1] + (n - last) * extra;
+}
+
+/** الخاوي كيتحاسب بالوحدة، ماشي بالحزمة. */
+export const isBlank = (p) => p?.id === 'blank';
+
+/* --------------------------------------------------------------------------
+   المدن — كتستعمل غير للعنوان.
+
+   `fee` بقا كمعلومة **ديال التكلفة ديالك** ماشي كثمن كيتحاسب للزبون: التوصيل
+   داخل ف الثمن دابا. مفيد باش تعرف الهامش — الداخلة (70) كتخليك تربح 45 درهم
+   أقل من كازا (25) على نفس الطلب.
+   TODO: راجع الأرقام مع شركة التوصيل ديالك — هادو تقديرات السوق
    -------------------------------------------------------------------------- */
 export const CITIES = [
   { ar: 'الدار البيضاء', fr: 'Casablanca', fee: 25 },
@@ -50,15 +78,22 @@ export const CITIES = [
 
 /* --------------------------------------------------------------------------
    جدول القياسات — بالسنتيمتر، قياس مسطح (التيشيرت مبسوط على الطاولة)
-   TODO: قيس تيشيرت حقيقي من المخزون ديالك وصحح هاد الأرقام. هادي أهم جدول
-         ف الموقع كامل: كيقلل الإرجاع وكيرفع الثقة أكثر من أي نص تسويقي.
+
+   `chest` = العرض المسطح من تحت الإبط للإبط، ماشي محيط الصدر. هو نفسو اللي
+   كيتحسب منو حجم الطبعة ف المعاينة (`cmPerFrame` ف designs.js) — رقم غالط
+   هنا كيعطي الزبون طبعة بحجم ماشي هو اللي غادي يوصلو.
+
+   S→XL جايين من جدول المورد (Podmex): العرض = "Width"، الطول = "Length".
+   TODO: XXL باقي تقدير — جدول المورد واقف ف XL، فعرضو (62) هو نفسو ديال XL.
+         وعمود `sleeve` كامل تقدير: الجدول ماعندوش قياس الكم. قيس تيشيرت
+         حقيقي وصحح الاثنين.
    -------------------------------------------------------------------------- */
 export const SIZES = [
-  { size: 'S', chest: 54, length: 69, sleeve: 22 },
-  { size: 'M', chest: 56, length: 71, sleeve: 23 },
-  { size: 'L', chest: 58, length: 73, sleeve: 24 },
-  { size: 'XL', chest: 60, length: 75, sleeve: 25 },
-  { size: 'XXL', chest: 62, length: 77, sleeve: 26 },
+  { size: 'S', chest: 54, length: 65, sleeve: 22 },
+  { size: 'M', chest: 58, length: 71, sleeve: 23 },
+  { size: 'L', chest: 60, length: 73, sleeve: 24 },
+  { size: 'XL', chest: 62, length: 75, sleeve: 25 },
+  { size: 'XXL', chest: 62, length: 77, sleeve: 26 },  // ⚠ نفس عرض XL
 ];
 
 const SIZE_LIST = SIZES.map((s) => s.size);
@@ -66,9 +101,11 @@ const SIZE_LIST = SIZES.map((s) => s.size);
 /* --------------------------------------------------------------------------
    بناء مسارات الصور من المانيفست اللي مولدو prep-images.py
    -------------------------------------------------------------------------- */
-function shot(stem) {
+/** نفس البناء ديال `shot` ولكن كيرجع undefined عوض ما يطيح — للموكابات
+    الاختيارية اللي الموقع كيخدم بلاهم. */
+function maybeShot(stem) {
   const m = images[stem];
-  if (!m) throw new Error(`ماكايناش صورة اسمها "${stem}" — شغّل: npm run images`);
+  if (!m) return undefined;
   return {
     // solid = خلفية داكنة مخبوزة (بطاقات الشبكة)
     solid: m.solid[720],
@@ -82,6 +119,13 @@ function shot(stem) {
     cutFull: m.cut[1080],
     lqip: m.lqip,
   };
+}
+
+/** الموكاب إجباري: إلا ماكانش، خطأ صريح دابا خير من صورة مهرّسة ف الإنتاج. */
+function shot(stem) {
+  const s = maybeShot(stem);
+  if (!s) throw new Error(`ماكايناش صورة اسمها "${stem}" — شغّل: npm run images`);
+  return s;
 }
 
 /* الألوان. قيم hex مقيسة من بيكسل القماش الحقيقي ف كل موكاب — ماشي بالعين —
@@ -154,10 +198,28 @@ if (!BLANK_VARIANTS.length) {
   throw new Error('ماكاين حتى موكاب خاوي — شغّل: npm run mockups && npm run images');
 }
 
+/* --------------------------------------------------------------------------
+   وجه المطبوعين — **ملف واحد لكل لون قماش، ماشي واحد لكل منتج**.
+
+   الأربعة كلهم عندهم نفس الوجه: الغرافيتي الصغير ديال VALLIKS ف الصدر.
+   ماشي ديزاين خاص لكل واحد، فماكاينش علاش نكرروا نفس الصورة 4 مرات — ملف
+   واحد كيخدم للأربعة، وإلا تبدل الغرافيتي كيتبدل ف بلاصة وحدة.
+
+   كيبقى `undefined` حتى يوصل الموكاب، وزر "القدّام" ف الفيترينة كيختافى
+   وحدو بلاه. نفس منطق ألوان الخاوي: حط الملف وشغّل `npm run images`
+   وكيبان بوحدو — بلا ما تمس هاد الملف.
+     raw/products/front-black.png   ← بخلفية شفافة، بحال blank-black-front.png
+     raw/products/front-white.png
+   -------------------------------------------------------------------------- */
+const PRINTED_FRONT = {
+  black: maybeShot('front-black'),
+  white: maybeShot('front-white'),
+};
+
 export const PRODUCTS = [
   {
     id: 'total-strike',
-    price: 189,
+    price: bundlePrice(1),
     was: 249,
     // `badge` خاوي عن قصد. كان فيه "الأكثر مبيعاً" وهو ادعاء كاذب على أول
     // دروب — ماكاينش منتج مبيع باش يكون الأكثر مبيعاً. زيدو منين تكون عندك
@@ -165,20 +227,20 @@ export const PRODUCTS = [
     name: { ar: 'TOTAL STRIKE', fr: 'TOTAL STRIKE' },
     tag: { ar: 'بولينغ · كوميك', fr: 'Bowling · Comic' },
     desc: {
-      ar: 'قنينات بولينغ كتصرخ وبولة جمجمة محترقة كتهرسهم. طباعة كبيرة على الظهر كامل بالأحمر والأبيض — كتبان من بعيد. قماش ثقيل والطبعة كتبقى بعد الغسيل.',
-      fr: "Des quilles de bowling qui hurlent, pulvérisées par une boule-crâne en flammes. Grande impression dos complet en rouge et blanc — ça se voit de loin. Coton lourd, et l'impression tient au lavage.",
+      ar: 'قنينات بولينغ كتصرخ وبولة جمجمة محترقة كتهرسهم. طباعة كبيرة على الظهر كامل بالأحمر والأبيض — كتبان من بعيد. قماش ثقيل.',
+      fr: "Des quilles de bowling qui hurlent, pulvérisées par une boule-crâne en flammes. Grande impression dos complet en rouge et blanc — ça se voit de loin. Coton lourd.",
     },
     sizes: SIZE_LIST,
     // ⚠ variants[0] هو اللي كيمشي للكاروسيل ثلاثي الأبعاد (grid.js).
     //   الموكاب الفوتوغرافي (كحل) خاصو يبقى أول واحد — فيه نسيج وطيات وظل حقيقي.
     variants: [
-      { ...BLACK, ...shot('total-strike-black') },
-      { ...WHITE, ...shot('total-strike-white') },
+      { ...BLACK, ...shot('total-strike-black'), front: PRINTED_FRONT.black },
+      { ...WHITE, ...shot('total-strike-white'), front: PRINTED_FRONT.white },
     ],
   },
   {
     id: 'high-roller',
-    price: 189,
+    price: bundlePrice(1),
     was: 249,
     name: { ar: 'HIGH ROLLER', fr: 'HIGH ROLLER' },
     tag: { ar: 'كارطة · غرافيتي', fr: 'Cartes · Graffiti' },
@@ -188,12 +250,12 @@ export const PRODUCTS = [
     },
     sizes: SIZE_LIST,
     variants: [
-      { ...BLACK, ...shot('high-roller-black') },
+      { ...BLACK, ...shot('high-roller-black'), front: PRINTED_FRONT.black },
     ],
   },
   {
     id: 'speed-demon',
-    price: 189,
+    price: bundlePrice(1),
     was: 249,
     name: { ar: 'SPEED DEMON', fr: 'SPEED DEMON' },
     tag: { ar: 'طوموبيل · سرعة', fr: 'Scooter · Vitesse' },
@@ -203,13 +265,13 @@ export const PRODUCTS = [
     },
     sizes: SIZE_LIST,
     variants: [
-      { ...BLACK, ...shot('speed-demon-black') },
-      { ...WHITE, ...shot('speed-demon-white') },
+      { ...BLACK, ...shot('speed-demon-black'), front: PRINTED_FRONT.black },
+      { ...WHITE, ...shot('speed-demon-white'), front: PRINTED_FRONT.white },
     ],
   },
   {
     id: 'outlaw',
-    price: 189,
+    price: bundlePrice(1),
     was: 249,
     name: { ar: 'OUTLAW', fr: 'OUTLAW' },
     tag: { ar: 'ويسترن · فردين', fr: 'Western · Revolvers' },
@@ -219,12 +281,12 @@ export const PRODUCTS = [
     },
     sizes: SIZE_LIST,
     variants: [
-      { ...BLACK, ...shot('outlaw-black') },
+      { ...BLACK, ...shot('outlaw-black'), front: PRINTED_FRONT.black },
     ],
   },
   {
     id: 'blank',
-    price: 129,
+    price: PRICING.blank,
     name: { ar: 'أوفرسايز خاوي', fr: 'Oversized Uni' },
     tag: { ar: 'بلا طباعة', fr: 'Sans impression' },
     desc: {
@@ -252,15 +314,16 @@ export const PRODUCTS = [
    ما تمس هاد الملف، غير إلا كان لون جديد بالكامل فخاصو ثابت فوق.
 
    ⚠ الثمن **واحد للوجه وللوجهين**. الزبون كيقدر يطبع قدّام ولور ف نفس
-   الطلب وكيخلص 189 د.م. هادا قرار مقصود ماشي غلطة — إلا بغيتي زيادة على
+   الطلب وكيخلص نفس الثمن. هادا قرار مقصود ماشي غلطة — إلا بغيتي زيادة على
    الوجه الثاني، خاص يتزاد حقل هنا وتتحسب ف order.js (billing).
 
-   TODO: 189 هو نفس ثمن المطبوعين الجاهزين. إلا كانت الطباعة المخصصة
-         (وحدة بوحدة، بلا كمية) كتكلفك أكثر، رفع هاد الرقم.
+   المخصص كيدخل ف نفس حزمة المطبوعين: 2 مخصص = 400، ولا مخصص + جاهز = 400.
+   TODO: إلا كانت الطباعة المخصصة (وحدة بوحدة، بلا كمية) كتكلفك أكثر من
+         الجاهزين، خاصها سلّم أثمنة ديالها بوحدها ف PRICING.
    -------------------------------------------------------------------------- */
 export const CUSTOM = {
   id: 'custom',
-  price: 189,
+  price: bundlePrice(1),
   name: { ar: 'تيشيرت بالديزاين ديالك', fr: 'T-shirt personnalisé' },
   tag: { ar: 'صمم ديالك', fr: 'Personnalisé' },
   desc: {
@@ -273,6 +336,3 @@ export const CUSTOM = {
 
 export const byId = (id) =>
   id === CUSTOM.id ? CUSTOM : PRODUCTS.find((p) => p.id === id);
-
-export const cityFee = (name) =>
-  CITIES.find((c) => c.ar === name || c.fr === name)?.fee ?? 0;
