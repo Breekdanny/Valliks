@@ -328,11 +328,27 @@ html[dir='rtl'] .cat[open] .cat__head::before { transform: rotate(45deg); }
 
 @media (max-width: 860px) {
   .studio { grid-template-columns: 1fr; }
+
+  /* المعاينة كتبقى ملصوقة حتى ف الهاتف — ولكن **مصغّرة**.
+     كانت static حيت اللصق بالحجم الكامل كياكل نص الشاشة. ولكن الحل ديك
+     الساعة خلق مشكل أكبر: على الهاتف الترتيب هو معاينة ← معرض 34 رسمة ←
+     ... ← حجم الطباعة. يعني الزبون كيحرك السلايدر وهو بعيد على التيشيرت،
+     وماكيشوفش النتيجة — وهادا هو بالضبط الشي اللي جاي يديرو.
+     الحل: نلصقوها ونحدو طولها ف 40vh، فكيبقى 60% ديال الشاشة للتحكمات. */
   .studio__preview {
-    position: static;           /* اللصق على الهاتف كياكل نص الشاشة */
+    position: sticky;
+    inset-block-start: calc(var(--header-h, 72px) + 0.5rem);
+    z-index: 3;
     max-inline-size: 420px;
     margin-inline: auto;
     inline-size: 100%;
+    padding-block-end: 0.6rem;
+    background: var(--ink);     /* بلاها المحتوى كيبان كيمرر تحتها */
+  }
+  /* المعاينة مربعة (aspect-ratio: 1)، فالعرض كيتبع الطول */
+  .studio__preview canvas {
+    inline-size: min(100%, 40vh);
+    margin-inline: auto;
   }
 }
 

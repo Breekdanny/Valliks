@@ -251,7 +251,6 @@ html[lang='ar'] .btn { text-transform: none; letter-spacing: 0; }
 }
 .brand img { block-size: 34px; inline-size: auto; }
 .brand__mark { filter: drop-shadow(0 0 14px rgb(var(--gold-rgb) / 0.35)); }
-.brand__word { block-size: 15px; opacity: 0.95; }
 
 .nav {
   display: flex;
