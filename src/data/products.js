@@ -295,7 +295,10 @@ export const PRODUCTS = [
     },
     sizes: SIZE_LIST,
     variants: [
-      { ...BLACK, ...shot('blank-black') },
+      /* الوجه هنا **نقي بلا غرافيتي** — هادا تيشيرت "بلا طباعة"، فوجهو
+         خاصو يكون خاوي بحال لورو. غير الكحل عندو `front` حيت هو
+         `variants[0]`، يعني هو وحدو اللي كيبان ف الفيترينة. */
+      { ...BLACK, ...shot('blank-black'), front: maybeShot('blank-black-front') },
       { ...WHITE, ...shot('blank-white') },
     ],
   },

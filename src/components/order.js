@@ -34,6 +34,7 @@ export function createOrderModal() {
     modal: document.getElementById('modal'),
     close: document.getElementById('modalClose'),
     img: document.getElementById('modalImg'),
+    face: document.getElementById('modalFace'),
     title: document.getElementById('modalTitle'),
     desc: document.getElementById('modalDesc'),
     ref: document.getElementById('modalRef'),
@@ -64,6 +65,7 @@ export function createOrderModal() {
   let variant = 0;
   let size = null;
   let qty = 1;
+  let side = 'back';                 // الوجه المعروض ف صورة النافذة
   let ref = orderRef();
 
   /* معطيات زايدة كتجي من قسم "صمم ديالك": اسم الديزاين، حجم الطباعة، وصورة
@@ -219,6 +221,13 @@ export function createOrderModal() {
   function paintProduct() {
     const v = product.variants[variant];
 
+    /* زر الوجه ماكيبانش ف الطلب المخصص: تما الصورة هي معاينة الزبون
+       (الديزاين على التيشيرت)، ماشي موكاب — وقلبها ماعندو معنى. */
+    const canFlip = !extra.preview && Boolean(v.front);
+    el.face.hidden = !canFlip;
+    if (!canFlip) side = 'back';
+    el.face.textContent = t(side === 'back' ? 'custom.front' : 'custom.back');
+
     // ف الطلب المخصص كنعرضو المعاينة اللي صاوب الزبون بنفسو (الديزاين على
     // التيشيرت) عوض الموكاب الخاوي — هو اللي كيأكد ليه أن الطلب مضبوط.
     if (extra.preview) {
@@ -226,8 +235,9 @@ export function createOrderModal() {
       el.img.src = extra.preview;
       setSaveLink(extra.preview);
     } else {
-      el.img.src = v.solid;
-      el.img.srcset = v.solidSrcset;
+      const view = side === 'front' && v.front ? v.front : v;
+      el.img.src = view.solid;
+      el.img.srcset = view.solidSrcset;
       setSaveLink(null);
     }
     el.img.alt = `${pick(product.name)} — ${pick(v)}`;
@@ -258,6 +268,7 @@ export function createOrderModal() {
 
     size = null;
     qty = 1;
+    side = 'back';
     extra = {};
     return true;
   }
@@ -332,6 +343,12 @@ export function createOrderModal() {
     const btn = e.target.closest('[data-v]');
     if (!btn) return;
     variant = Number(btn.dataset.v);
+    paintProduct();
+  });
+
+  // الزر كيوري الوجه اللي غادي تمشي ليه، ماشي اللي كاين دابا
+  el.face.addEventListener('click', () => {
+    side = side === 'back' ? 'front' : 'back';
     paintProduct();
   });
 
@@ -461,6 +478,7 @@ export function createOrderModal() {
       // القياس مختار أصلاً ف قسم التصميم — ماكاينش علاش نطلبوه مرة أخرى
       size = product.sizes.includes(opts.size) ? opts.size : null;
       qty = 1;
+      side = 'back';
       el.form.querySelectorAll('.field').forEach((f) => (f.dataset.invalid = 'false'));
       paintProduct();
       el.modal.showModal();

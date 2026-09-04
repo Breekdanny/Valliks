@@ -69,9 +69,16 @@ export function renderGrid(root, { onOrder }) {
       ? `<s class="card__was">${money(p.was)}</s>`
       : '';
 
+    // زر الوجه كيبان غير إلا كان عند شي لون موكاب قدّام
+    const hasFront = p.variants.some((v) => v.front);
+    const faceBtn = hasFront
+      ? `<button class="card__face" type="button" data-face>${t('custom.front')}</button>`
+      : '';
+
     card.innerHTML = `
       <div class="card__media">
         ${badge}
+        ${faceBtn}
         <img src="${v0.solid}" srcset="${v0.solidSrcset}"
              sizes="(max-width: 600px) 92vw, (max-width: 900px) 46vw, 30vw"
              alt="${pick(p.name)} — ${pick(v0)}"
@@ -89,51 +96,70 @@ export function renderGrid(root, { onOrder }) {
       </div>
     `;
 
-    /* --- تبديل اللون: كنبدلو الصورة بتلاشي خفيف بدل قفزة مباشرة --- */
+    /* --- تبديل اللون والوجه: كنبدلو الصورة بتلاشي خفيف بدل قفزة مباشرة --- */
     let active = 0;
+    let side = 'back';
+    let token = 0;                     // كل نداء عندو رقمو — الأخير هو اللي كيربح
     const img = card.querySelector('.card__media img');
+
+    /** اللون اللي مختار، على الوجه المطلوب. اللون بلا قدّام كيبقى على لورو. */
+    const viewOf = (v) => (side === 'front' && v.front ? v.front : v);
+
+    function swapImage() {
+      const mine = ++token;
+      const v = p.variants[active];
+      const view = viewOf(v);
+
+      img.dataset.swapping = 'true';
+
+      const swap = async () => {
+        img.removeEventListener('transitionend', swap);
+        if (img.dataset.swapping !== 'true') return;   // تسبقنا شي نداء آخر
+
+        // كنحمّلو ونفكّو الصورة الجديدة **قبل** ما نظهروها. بلا هادشي
+        // كنرجعو الشفافية على صورة مازال ماوصلاتش، فكيبان مربع خاوي.
+        // بجوج ألوان ماكانش كيبان؛ بستة ألوان على 4G كيبان ف كل تبديل جديد.
+        const next = new Image();
+        next.sizes = img.sizes;
+        next.srcset = view.solidSrcset;
+        next.src = view.solid;
+        try {
+          await next.decode();
+        } catch {
+          /* الشبكة قاطعة ولا الصورة خايبة — كنكملو باش ماتبقاش البطاقة مخفية */
+        }
+
+        if (mine !== token) return;    // الزائر بدل حاجة أخرى ملي كنتسناو
+        img.src = view.solid;
+        img.srcset = view.solidSrcset;
+        img.alt = `${pick(p.name)} — ${pick(v)}`;
+        img.dataset.swapping = 'false';
+      };
+
+      img.addEventListener('transitionend', swap, { once: true });
+      // احتياط إلا ماوقعش transitionend (تقليل الحركة مثلاً)
+      setTimeout(swap, 300);
+    }
 
     card.querySelectorAll('.swatch').forEach((btn) => {
       btn.addEventListener('click', () => {
         const i = Number(btn.dataset.v);
         if (i === active) return;
         active = i;
-        const v = p.variants[i];
 
         card.querySelectorAll('.swatch').forEach((b) =>
           b.setAttribute('aria-pressed', String(Number(b.dataset.v) === i))
         );
 
-        img.dataset.swapping = 'true';
-
-        const swap = async () => {
-          img.removeEventListener('transitionend', swap);
-          if (img.dataset.swapping !== 'true') return;   // تسبقنا شي نداء آخر
-
-          // كنحمّلو ونفكّو الصورة الجديدة **قبل** ما نظهروها. بلا هادشي
-          // كنرجعو الشفافية على صورة مازال ماوصلاتش، فكيبان مربع خاوي.
-          // بجوج ألوان ماكانش كيبان؛ بستة ألوان على 4G كيبان ف كل تبديل جديد.
-          const next = new Image();
-          next.sizes = img.sizes;
-          next.srcset = v.solidSrcset;
-          next.src = v.solid;
-          try {
-            await next.decode();
-          } catch {
-            /* الشبكة قاطعة ولا الصورة خايبة — كنكملو باش ماتبقاش البطاقة مخفية */
-          }
-
-          if (active !== i) return;      // الزائر بدل لون آخر ملي كنتسناو
-          img.src = v.solid;
-          img.srcset = v.solidSrcset;
-          img.alt = `${pick(p.name)} — ${pick(v)}`;
-          img.dataset.swapping = 'false';
-        };
-
-        img.addEventListener('transitionend', swap, { once: true });
-        // احتياط إلا ماوقعش transitionend (تقليل الحركة مثلاً)
-        setTimeout(swap, 300);
+        swapImage();
       });
+    });
+
+    // الزر كيوري **الوجه اللي غادي تمشي ليه**، ماشي اللي كاين دابا
+    card.querySelector('[data-face]')?.addEventListener('click', (e) => {
+      side = side === 'back' ? 'front' : 'back';
+      e.currentTarget.textContent = t(side === 'back' ? 'custom.front' : 'custom.back');
+      swapImage();
     });
 
     card.querySelector('[data-order]').addEventListener('click', () =>

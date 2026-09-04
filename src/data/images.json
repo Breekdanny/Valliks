@@ -1,10 +1,14 @@
 {
   "blank-black-front": {
     "solid": {
-      "1080": "/products/blank-black-front-solid-1080.webp"
+      "1080": "/products/blank-black-front-solid-1080.webp",
+      "720": "/products/blank-black-front-solid-720.webp",
+      "480": "/products/blank-black-front-solid-480.webp"
     },
     "cut": {
-      "1080": "/products/blank-black-front-cut-1080.webp"
+      "1080": "/products/blank-black-front-cut-1080.webp",
+      "720": "/products/blank-black-front-cut-720.webp",
+      "480": "/products/blank-black-front-cut-480.webp"
     },
     "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwBACdASoYABgAPt1WpU2opKOiN/qoARAbiWcAx+Qh38dANWTBmGa3OfHiyJSVOqAA/uXeY8p3bPeETZYj2k4ii0IuOhYv831KY5+lUDz6UKTbpgA=",
     "width": 2200,
@@ -128,6 +132,36 @@
     "lqip": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQBQCdASoYABgAPu1qrU8ppiQiMAgBMB2JZwDG9CHf3Xn7Qxr24y3mj4rFukeKw8AgAP7cw7yx3/eOpfStVUqQh7BI46yUe6Lk2gQVI3TggSIEwBMyxZ7FXFHCkSkAAAA=",
     "width": 2200,
     "height": 2200
+  },
+  "front-black": {
+    "solid": {
+      "1080": "/products/front-black-solid-1080.webp",
+      "720": "/products/front-black-solid-720.webp",
+      "480": "/products/front-black-solid-480.webp"
+    },
+    "cut": {
+      "1080": "/products/front-black-cut-1080.webp",
+      "720": "/products/front-black-cut-720.webp",
+      "480": "/products/front-black-cut-480.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAACwBACdASoYABgAPt1apU2opSOiN/qoARAbiWcAx+Qh38c6Ul+ZU2B8gyFOSz4AAP7l3mPKQsi1sNmQv+2rINorgPNBi495nhtT8AK5Y75qiPyuUAA=",
+    "width": 1080,
+    "height": 1441
+  },
+  "front-white": {
+    "solid": {
+      "1080": "/products/front-white-solid-1080.webp",
+      "720": "/products/front-white-solid-720.webp",
+      "480": "/products/front-white-solid-480.webp"
+    },
+    "cut": {
+      "1080": "/products/front-white-cut-1080.webp",
+      "720": "/products/front-white-cut-720.webp",
+      "480": "/products/front-white-cut-480.webp"
+    },
+    "lqip": "data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwBQCdASoYABgAPu1qrU8ppiQiMBgIATAdiWcAw+gQ7+fcNx9P9JHYddlUfcvQM7OAAAD+3MO8sd/3zhCDlcTmrmhpNPij/pL10liKXqcytZQdnZfuqwRUQWEn5svCSc5zFCAA",
+    "width": 1080,
+    "height": 1441
   },
   "high-roller-black": {
     "solid": {

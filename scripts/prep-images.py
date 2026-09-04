@@ -77,6 +77,10 @@ WIDTHS = [1080, 720, 480]
 # القدّام كيتستعمل غير ف كانفاس المعاينة (1080) — ماكاينش <img> كيعرضو
 # بـsrcset، فالنسخ الصغار ضايعين.
 FRONT_WIDTHS = [1080]
+# استثناء: الخاوي الكحل هو `variants[0]` ديال منتج `blank`، يعني هو اللي
+# كيبان ف الفيترينة. زر اللور/القدّام كيبدل `<img>` بـsrcset، فبلا النسخ
+# الصغار 4 تيشيرتات كيقلبو وهو لا — تناقض كيبان بالعين.
+FRONT_FULL_SRCSET = {"blank-black-front"}
 # الرسمة كتبان أصغر من التيشيرت (بطاقة ف المعرض + طبعة ف المعاينة)، فماكاينش
 # داعي لـ1080. أكبر استعمال هو المعاينة على canvas ~900px.
 DESIGN_WIDTHS = [900, 600, 300]
@@ -148,6 +152,59 @@ def resample_rgba(arr, alpha, size, box, canvas_size):
     safe = np.maximum(out_a, 1.0 / 255.0)[..., None]
     out_rgb = np.where(out_a[..., None] > 0.004, out_pm / safe, 255.0)
     return np.clip(out_rgb, 0, 255), out_a
+
+
+def to_square(arr, alpha=None):
+    """
+    كنحولو الإطار لمربع، وكنمركزو التيشيرت أفقياً وعلى TARGET_CY عمودياً.
+
+    الموكابات اللي كتخرج من split-mockups.py مربعين أصلاً. أما موكاب **مفرد**
+    جاي مباشرة من المورد كيجي طولاني (1080×1441)، و`<img>` ف الفيترينة وف
+    الشبكة مربع — فالتيشيرت كيبان بحجم مختلف ملي يتقلب بين اللور والقدّام.
+
+    ⚠ خاصو يجي **قبل** normalize_framing: هاداك كيوحد الحجم المحسوس بالمتوسط
+    الهندسي √(عرض×طول)، وهو محسوب على أبعاد اللوحة. لوحة طولانية كتعطي نفس
+    المتوسط بعرض أكبر وطول أصغر — يعني تيشيرت بشكل مختلف.
+
+    الصورة المربعة أصلاً كتخرج كيف ما دخلات بالضبط.
+    """
+    h, w = arr.shape[:2]
+    if h == w:
+        return arr, alpha
+
+    cols, rows = shirt_bbox(arr, alpha)
+    if cols is None:
+        return arr, alpha
+
+    side = max(h, w)
+    dx = round(side * 0.50 - (cols[0] + cols[-1]) / 2)
+    dy = round(side * TARGET_CY - (rows[0] + rows[-1]) / 2)
+
+    if alpha is not None:
+        # الحشو شفاف. RGB أبيض حيت un-premultiply كيحط الأبيض ف البيكسلات
+        # الشفافة — نفس الاتفاق ديال resample_rgba.
+        out_rgb = np.full((side, side, 3), 255.0, dtype=np.float32)
+        out_a = np.zeros((side, side), dtype=np.float32)
+    else:
+        # بلا قناة شفافية: الحشو بلون الخلفية المقيس من الحواف، باش
+        # background_mask يبقى يلقى الأركان بلون الخلفية.
+        edge = max(2, min(h, w) // 24)
+        bg = np.median(np.concatenate([
+            arr[:edge].reshape(-1, 3), arr[-edge:].reshape(-1, 3),
+            arr[:, :edge].reshape(-1, 3), arr[:, -edge:].reshape(-1, 3),
+        ]), axis=0)
+        out_rgb = np.tile(bg.astype(np.float32), (side, side, 1))
+        out_a = None
+
+    # المجال المشترك بين الصورة الأصلية واللوحة الجديدة
+    sx, sy = max(0, -dx), max(0, -dy)
+    tx, ty = max(0, dx), max(0, dy)
+    cw, ch = min(w - sx, side - tx), min(h - sy, side - ty)
+    out_rgb[ty:ty + ch, tx:tx + cw] = arr[sy:sy + ch, sx:sx + cw]
+    if out_a is not None:
+        out_a[ty:ty + ch, tx:tx + cw] = alpha[sy:sy + ch, sx:sx + cw]
+
+    return out_rgb, out_a
 
 
 def normalize_framing(arr, alpha=None):
@@ -417,7 +474,8 @@ def process_products():
         stem = src.stem
         # صور القدّام كتتعرض **غير ف كانفاس المعاينة** (solidFull/cutFull)،
         # ماشي ف <img> بـsrcset. توليد 480 و720 ليها = ~1.4 MB ضايعين ف dist/.
-        widths = FRONT_WIDTHS if stem.endswith("-front") else WIDTHS
+        needs_srcset = not stem.endswith("-front") or stem in FRONT_FULL_SRCSET
+        widths = WIDTHS if needs_srcset else FRONT_WIDTHS
         img = Image.open(src)
         alpha = load_alpha(img)
         img = img.convert("RGB")
@@ -426,6 +484,9 @@ def process_products():
         # توحيد التأطير قبل أي معالجة — باش كل التيشيرتات ياخدو نفس الحجم
         # داخل الإطار مهما كان الموكاب اللي جاو منو.
         before = shirt_bbox(arr, alpha)
+        # المربع أولاً: normalize_framing كيحسب على أبعاد اللوحة، فلوحة
+        # طولانية كتعطيه شكل تيشيرت مختلف على نفس الحجم المحسوس.
+        arr, alpha = to_square(arr, alpha)
         arr, alpha = normalize_framing(arr, alpha)
         after = shirt_bbox(arr, alpha)
 
@@ -444,12 +505,15 @@ def process_products():
             "width": img.width,
             "height": img.height,
         }
-        def wh(bb):
+        # ⚠ كل قياس على أبعاد **لوحتو هو**: to_square كيبدل الأبعاد، فحساب
+        # "من بعد" على أبعاد الصورة الأصلية كيعطي نسب كذابة (99×67% عوض
+        # 74×67% على موكاب طولاني).
+        def wh(bb, w, h):
             cols, rows = bb
-            return ((cols[-1] - cols[0]) / img.width * 100,
-                    (rows[-1] - rows[0]) / img.height * 100)
+            return ((cols[-1] - cols[0]) / w * 100, (rows[-1] - rows[0]) / h * 100)
 
-        (bw, bh), (aw, ah) = wh(before), wh(after)
+        (bw, bh) = wh(before, img.width, img.height)
+        (aw, ah) = wh(after, arr.shape[1], arr.shape[0])
         print(f"  {stem:18s} ماسك={'alpha' if alpha is not None else ' lum ':5s}"
               f"  خلفية={mask.mean()*100:5.1f}%"
               f"  التيشيرت: {bw:3.0f}×{bh:3.0f}% → {aw:3.0f}×{ah:3.0f}%")

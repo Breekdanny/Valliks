@@ -76,6 +76,12 @@
   border-radius: var(--r);
   background: var(--surface);
 }
+/* الزر كياخد شكلو من .card__face، وهنا غير الموضع: داخل الصورة ماشي ف
+   الحشو ديال اللوحة — لهادشي كنزيدو نفس الـclamp ديال padding. */
+.modal__face {
+  inset-block-start: calc(clamp(1.25rem, 2.5vw, 2rem) + 0.7rem);
+  inset-inline-end: calc(clamp(1.25rem, 2.5vw, 2rem) + 0.7rem);
+}
 .modal__title {
   font-family: var(--f-display);
   font-weight: var(--display-weight);
