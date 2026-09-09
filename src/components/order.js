@@ -20,6 +20,7 @@ import {
   buildMessage,
   buildLink,
 } from '../lib/whatsapp.js';
+import { trackView, trackAddToCart, trackOrderSent, logOrder } from '../lib/analytics.js';
 
 const SAVED = 'valliks:customer';
 
@@ -363,10 +364,23 @@ export function createOrderModal() {
   });
 
   el.cartAdd.addEventListener('click', () => {
+    const added = pending();
     if (!addPending()) {
       mark('fSize', true);
       return;
     }
+    /* القيمة هنا هي ديال **اللي تزاد** ماشي السلة كاملة — هادا هو المعنى ديال
+       add_to_cart ف GA وف Meta. وبثمن الوحدة باش مجموع السطور = القيمة. */
+    trackAddToCart({
+      value: added.product.price * added.qty,
+      items: [{
+        id: added.product.id,
+        name: pick(added.product.name),
+        variant: pick(added.product.variants[added.variant]),
+        price: added.product.price,
+        qty: added.qty,
+      }],
+    });
     paintProduct();
     el.productChips.scrollIntoView({ block: 'center', behavior: 'smooth' });
   });
@@ -449,6 +463,47 @@ export function createOrderModal() {
       notes: el.notes.value,
     });
 
+    /* التتبع **قبل** ما يتحل واتساب: `window.open` كيقدر يخرج الزائر من
+       الصفحة فاللحظة. sendBeacon مصمم لهاد الحالة بالضبط — كينجح حتى إلا
+       مشات الصفحة. وبجوجهم fire-and-forget: ماكنتسناوهمش وماكيوقفوش الطلب. */
+    logOrder({
+      ref,
+      at: new Date().toISOString(),
+      items: cart.map((l) => ({
+        id: l.product.id,
+        name: pick(l.product.name),
+        color: pick(l.product.variants[l.variant]),
+        size: l.size,
+        qty: l.qty,
+        design: l.extra?.sides?.map((s) => s.design).filter(Boolean).join(' + ') || '',
+      })),
+      printed: b.printed,
+      blanks: b.blanks,
+      total: b.total,
+      // هادو كيمشيو **غير للـSheet ديالك** — ماكيوصلو لا لـGA لا لـMeta
+      name: el.name.value.trim(),
+      phone: normalizePhone(el.phone.value),
+      city: el.city.value,
+      address: el.address.value.trim(),
+      notes: el.notes.value.trim(),
+      lang: getLang(),
+    });
+
+    trackOrderSent({
+      ref,
+      value: b.total,
+      /* `price` هو ثمن المنتوج بالوحدة، فمجموع السطور ماشي بالضرورة هو
+         `value` — الحزمة (2 → 400) كترخّص. GA وMeta كياخدو `value` كمصدر
+         للقيمة، والسطور غير للتفصيل. */
+      items: cart.map((l) => ({
+        id: l.product.id,
+        name: pick(l.product.name),
+        variant: pick(l.product.variants[l.variant]),
+        price: l.product.price,
+        qty: l.qty,
+      })),
+    });
+
     const url = buildLink(SHOP.whatsapp, msg);
     const win = window.open(url, '_blank', 'noopener');
     if (!win) location.href = url;        // إلا حجب المتصفح النافذة
@@ -482,6 +537,11 @@ export function createOrderModal() {
       el.form.querySelectorAll('.field').forEach((f) => (f.dataset.invalid = 'false'));
       paintProduct();
       el.modal.showModal();
+      trackView({
+        id: product.id,
+        name: pick(product.name),
+        price: product.price,
+      });
     },
     /** كيعاود الرسم ملي تتبدل اللغة */
     refresh() {

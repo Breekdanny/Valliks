@@ -16,6 +16,7 @@ import { initI18n, toggleLang, onLangChange, t, pick, money, getLang } from './i
 import { createCarousel } from './lib/carousel.js';
 import { initReveal, initScrollState } from './lib/motion.js';
 import { contactLink } from './lib/whatsapp.js';
+import { initAnalytics } from './lib/analytics.js';
 import { createOrderModal } from './components/order.js';
 import { createCustomSection } from './components/custom.js';
 import {
@@ -213,3 +214,7 @@ onLangChange(() => {
 
   initReveal();
 });
+
+/* التتبع آخر حاجة عن قصد: كيتسنى حدث `load`، والمعرّف الخاوي = ماكيتحمل
+   حتى سكريبت. شوف lib/analytics.js وSHOP.analytics ف data/products.js */
+initAnalytics();
