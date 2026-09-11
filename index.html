@@ -50,6 +50,7 @@
         <a href="#shop" data-i18n="nav.shop">المنتوجات</a>
         <a href="#custom" data-i18n="nav.custom">صمم ديالك</a>
         <a href="#sizes" data-i18n="nav.sizes">القياسات</a>
+        <a href="#worn" id="navWorn" data-i18n="nav.worn" hidden>ف اللبسة</a>
         <a href="#story" data-i18n="nav.story">الطباعة</a>
         <a href="#faq" data-i18n="nav.faq">أسئلة</a>
       </nav>
@@ -266,6 +267,26 @@
             </p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ==================== كيفاش كيجي ف اللبسة ====================
+         مباشرة من بعد الجدول عن قصد: تما الزبون كيقرر على القياس، والجدول
+         كيعطيه أرقام (60 سم) — الصور كتعطيه المعنى ديالهم على جسم حقيقي.
+         `hidden` من البداية: main.js كيبينو غير إلا كانت شي صورة ف
+         raw/lookbook/. -->
+    <section class="section" id="worn" hidden>
+      <div class="shell">
+        <div class="section-head" data-reveal>
+          <p class="kicker" data-i18n="worn.kicker">ف اللبسة</p>
+          <h2 class="display" data-i18n="worn.title">كيفاش كيجي عليك</h2>
+          <p class="lede" data-i18n="worn.sub">
+            صور حقيقية على جسم حقيقي — باش تشوف كيفاش كتطيح القصة الأوفرسايز قبل ما تختار القياس.
+          </p>
+        </div>
+        <!-- tabindex باش الشريط يتمرر بالأسهم حتى بلا فارة -->
+        <div class="worn" id="wornTrack" tabindex="0" role="region"
+             data-i18n-aria="worn.title" aria-label="كيفاش كيجي عليك"></div>
       </div>
     </section>
 

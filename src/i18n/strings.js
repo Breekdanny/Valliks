@@ -15,6 +15,7 @@ export const ar = {
   'nav.shop': 'المنتوجات',
   'nav.custom': 'صمم ديالك',
   'nav.sizes': 'القياسات',
+  'nav.worn': 'ف اللبسة',
   'nav.story': 'الطباعة',
   'nav.faq': 'أسئلة',
   'nav.order': 'طلب',
@@ -89,6 +90,14 @@ export const ar = {
   'custom.warnFile': 'ماقدرناش نقراو هاد الملف. جرب PNG ولا JPG ولا WebP.',
   'custom.warnPick': 'ختار رسمة من المعرض ولا حط الديزاين ديالك.',
 
+  /* النصوص كتهضر على **القصة والمقاس** ماشي على ديزاين معين — التصوير
+     الكامل غادي يخلط المنتوجات. وماكاين حتى ادعاء "بلا تعديل": الصور
+     فيهم تعديل ديال الإضاءة. */
+  'worn.kicker': 'ف اللبسة',
+  'worn.title': 'كيفاش كيجي عليك',
+  'worn.sub':
+    'صور حقيقية على جسم حقيقي — باش تشوف كيفاش كتطيح القصة الأوفرسايز قبل ما تختار القياس.',
+  'worn.alt': 'تيشيرت VALLIKS أوفرسايز ملبوس',
   'sizes.kicker': 'القياسات',
   'sizes.title': 'قيس قبل ما تطلب',
   'sizes.sub':
@@ -197,6 +206,7 @@ export const fr = {
   'nav.shop': 'Produits',
   'nav.custom': 'Personnalisé',
   'nav.sizes': 'Tailles',
+  'nav.worn': 'Porté',
   'nav.story': 'Impression',
   'nav.faq': 'Questions',
   'nav.order': 'Commander',
@@ -269,6 +279,11 @@ export const fr = {
   'custom.warnFile': 'Impossible de lire ce fichier. Essayez un PNG, JPG ou WebP.',
   'custom.warnPick': 'Choisissez un visuel dans la galerie ou envoyez le vôtre.',
 
+  'worn.kicker': 'Porté',
+  'worn.title': 'Comment il tombe',
+  'worn.sub':
+    "De vraies photos, sur une vraie personne — pour voir comment tombe la coupe oversize avant de choisir votre taille.",
+  'worn.alt': 'T-shirt oversize VALLIKS porté',
   'sizes.kicker': 'Tailles',
   'sizes.title': 'Mesurez avant de commander',
   'sizes.sub':

@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "images": "python scripts/prep-images.py",
     "designs": "python scripts/prep-images.py designs",
+    "lookbook": "python scripts/prep-images.py lookbook",
     "mockups": "python scripts/split-mockups.py",
     "fonts": "node scripts/fetch-fonts.mjs"
   },

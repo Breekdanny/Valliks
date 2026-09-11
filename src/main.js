@@ -11,7 +11,7 @@ import './styles/components/custom.css';
 import './styles/components/info.css';
 import './styles/components/order.css';
 
-import { PRODUCTS, CITIES, SIZES, SHOP } from './data/products.js';
+import { PRODUCTS, CITIES, SIZES, SHOP, LOOKBOOK } from './data/products.js';
 import { initI18n, toggleLang, onLangChange, t, pick, money, getLang } from './i18n/index.js';
 import { createCarousel } from './lib/carousel.js';
 import { initReveal, initScrollState } from './lib/motion.js';
@@ -23,6 +23,7 @@ import {
   renderSlides,
   renderGrid,
   renderSizeTable,
+  renderLookbook,
   renderCitySelect,
   renderFooterCities,
   renderMarquee,
@@ -35,6 +36,9 @@ initI18n();
 
 /* ---------- 2. الأقسام الثابتة ---------- */
 renderSizeTable($('sizeRows'), SIZES);
+// القسم والرابط ف الـnav كيبقاو مخبيين إلا raw/lookbook/ خاوي
+const renderWorn = () => renderLookbook($('worn'), $('wornTrack'), $('navWorn'), LOOKBOOK);
+renderWorn();
 renderCitySelect($('iCity'), CITIES);
 renderFooterCities($('footerCities'), CITIES);
 renderMarquee($('marquee1'), $('marquee2'));
@@ -197,6 +201,7 @@ onLangChange(() => {
   // كل حاجة معمّرة من الداتا خاصها تتعاود. النصوص المعلّمة بـdata-i18n
   // كيتكلف بيها applyTo داخل initI18n → paint().
   renderSizeTable($('sizeRows'), SIZES);
+  renderWorn();                      // النص البديل ديال الصور كيتبدل مع اللغة
   renderFooterCities($('footerCities'), CITIES);
   renderMarquee($('marquee1'), $('marquee2'));
   renderGrid($('grid'), { onOrder: (id, v) => modal.open(id, v) });

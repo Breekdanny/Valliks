@@ -208,6 +208,44 @@ html[lang='ar'] .stat span { text-transform: none; letter-spacing: 0.02em; }
   max-inline-size: 68ch;
 }
 
+/* ---------- كيفاش كيجي ف اللبسة ----------
+   شريط أفقي ماشي شبكة: الصور طوال، والشريط كيكبر من 3 لـ15 بلا ما يتبدل
+   التخطيط. ف RTL الاتجاه كيتقلب وحدو (grid-auto-flow: column). */
+
+.worn {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(78vw, 360px);
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  margin-block-start: clamp(1.5rem, 3vw, 2.25rem);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* السحب بالإصبع ف الشريط ماكيدفعش الصفحة كاملة ملي يوصل للطرف */
+  overscroll-behavior-x: contain;
+  padding-block-end: 0.75rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-soft) transparent;
+}
+.worn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: var(--r-lg);
+}
+
+.worn__shot {
+  margin: 0;
+  scroll-snap-align: start;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--surface);      /* كيبان ملي الصورة مازال ماتحملاتش */
+}
+.worn__shot img {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;                /* النسبة من width/height ف الـHTML */
+}
+
 /* ---------- الهاتف ---------- */
 
 @media (max-width: 900px) {

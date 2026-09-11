@@ -24,7 +24,7 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -34,11 +34,14 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "raw" / "products"
 DESIGNS_RAW = ROOT / "raw" / "designs"
 BRAND_RAW = ROOT / "raw" / "brand"
+# صور حقيقية على الجسم — قسم "كيفاش كيجي ف اللبسة"
+LOOKBOOK_RAW = ROOT / "raw" / "lookbook"
 
 # المخرجات — هادو وحدهم اللي كينشرو
 OUT = ROOT / "public" / "products"
 DESIGNS_OUT = ROOT / "public" / "designs"
 BRAND = ROOT / "public" / "brand"
+LOOKBOOK_OUT = ROOT / "public" / "lookbook"
 
 DATA = ROOT / "src" / "data"
 
@@ -84,6 +87,11 @@ FRONT_FULL_SRCSET = {"blank-black-front"}
 # الرسمة كتبان أصغر من التيشيرت (بطاقة ف المعرض + طبعة ف المعاينة)، فماكاينش
 # داعي لـ1080. أكبر استعمال هو المعاينة على canvas ~900px.
 DESIGN_WIDTHS = [900, 600, 300]
+# صور اللبسة طوال وكيبانو ف بطاقة ~360px — 960 كيغطي شاشات 2x و3x.
+LOOK_WIDTHS = [960, 640, 400]
+# عتبة الشريط الكحل ديال السكرين شوت. صارمة عن قصد: الصور مصورة ف الغروب،
+# والسما والأرض فيهم غامقين بزاف — عتبة واسعة (مثلاً 40) كتاكل من الصورة.
+BAR_LIMIT = 10
 QUALITY = 82
 
 
@@ -628,6 +636,100 @@ def process_designs():
     return manifest
 
 
+def crop_bars(img, limit=BAR_LIMIT):
+    """
+    كيقص الشرايط الكحلة ديال السكرين شوت. كيرجع (الصورة، (فوق، تحت، يسار، يمين)).
+
+    السطر كيتحسب شريط غير إلا كانو **شبه كل** البيكسلات فيه تحت العتبة
+    (99.5% — كيسمح بشوية ضجيج JPEG حدا الحافة). والقص **من الطرف لداخل
+    برك**، متتالي: الشريط الحقيقي ديما ملاصق للحافة، وسطر غامق ف وسط
+    الصورة (سما ديال الليل) ماخاصوش يتقص أبداً.
+    """
+    a = np.asarray(img.convert("RGB"))
+    dark = a.max(axis=2) < limit
+    row_dark, col_dark = dark.mean(axis=1), dark.mean(axis=0)
+
+    def run(frac):
+        """الشريط الصارم، ومن بعدو حتى 4 سطور ديال الحافة.
+
+        ضغط JPEG كيخلي ضجيج (قيم 12-20) ف السطرين الأولين من الصورة حدا
+        الشريط، فكيبقى خيط كحل ديال 1-3px. الحل ماشي توسيع العتبة — هادشي
+        كياكل السما — ولكن نبلعو سطور "شبه كحلين" (95%)، **4 على الأكثر**:
+        أسوأ حالة كنخسرو 4px من الصورة، ماشي السما كاملة.
+        """
+        n = 0
+        while n < len(frac) and frac[n] >= 0.995:
+            n += 1
+        if n == 0:
+            return 0                       # ماكاينش شريط أصلاً — ماكنبلعو والو
+        edge = 0
+        while edge < 4 and n + edge < len(frac) and frac[n + edge] >= 0.95:
+            edge += 1
+        return n + edge
+
+    h, w = dark.shape
+    top, bottom = run(row_dark), run(row_dark[::-1])
+    left, right = run(col_dark), run(col_dark[::-1])
+
+    # صورة كحلة كاملة — ماكاين ماشي نقصو، والقص غادي يخليها فارغة
+    if top + bottom >= h or left + right >= w:
+        return img, (0, 0, 0, 0)
+    return img.crop((left, top, w - right, h - bottom)), (top, bottom, left, right)
+
+
+def process_lookbook():
+    """
+    صور حقيقية على الجسم — قسم "كيفاش كيجي ف اللبسة".
+
+    ⚠ عكس المنتوجات: هنا **ماكنمسو الصورة نهائياً**. لا حذف خلفية، لا بقعة
+    ضوء، لا تعديل لون — to_solid وsynthetic_shadow ديال الموكابات كيخربو
+    صورة حقيقية. الوحيد: الدوران ديال EXIF، قص الشرايط الكحلة، وتصغير.
+
+    المجلد كيتولد كامل من هنا، فكنمسحوه قبل: صورة تحيدات من raw/ ماخاصهاش
+    تبقى تتنشر ف dist/ بلا ما حد يعرف.
+    """
+    manifest = {}
+    LOOKBOOK_OUT.mkdir(parents=True, exist_ok=True)
+    for old in LOOKBOOK_OUT.glob("*.webp"):
+        old.unlink()
+
+    sources = []
+    if LOOKBOOK_RAW.exists():
+        sources = sorted(
+            [p for ext in ("*.jpg", "*.jpeg", "*.png", "*.webp")
+             for p in LOOKBOOK_RAW.glob(ext)],
+            key=lambda p: p.stem,
+        )
+    if not sources:
+        print("  raw/lookbook/ خاوي — القسم كيبقى مخبي ف الموقع")
+
+    for src in sources:
+        img = Image.open(src)
+        # صور الهاتف كتجي بالدوران ف EXIF ماشي ف البيكسلات — بلا هادشي كتخرج
+        # مقلوبة ولا مايلة
+        img = ImageOps.exif_transpose(img).convert("RGB")
+        raw_size = img.size
+        img, (t, b, l, r) = crop_bars(img)
+
+        manifest[src.stem] = {
+            "src": save_sizes(
+                img, src.stem, "", out=LOOKBOOK_OUT,
+                widths=LOOK_WIDTHS, url_base="/lookbook",
+            ),
+            "width": img.width,
+            "height": img.height,
+        }
+        cut = f"تحيد: فوق {t} · تحت {b}" + (f" · يسار {l} · يمين {r}" if l or r else "")
+        print(f"  {src.stem:12s} {raw_size[0]}×{raw_size[1]} → "
+              f"{img.width}×{img.height}   ({cut})")
+
+    DATA.mkdir(parents=True, exist_ok=True)
+    (DATA / "lookbook.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    return manifest
+
+
 def logo_alpha(arr):
     """
     كنحيدو الخلفية ونرجعو ألوان حقيقية.
@@ -783,4 +885,7 @@ if __name__ == "__main__":
     if only in ("all", "logo"):
         print("اللوغو:")
         process_logo()
+    if only in ("all", "lookbook"):
+        print("اللبسة:")
+        process_lookbook()
     print("تم.")

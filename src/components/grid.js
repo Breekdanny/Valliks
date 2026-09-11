@@ -175,6 +175,30 @@ export function renderGrid(root, { onOrder }) {
    جدول القياسات · المدن · الشريط المتحرك · الروابط الاجتماعية
    -------------------------------------------------------------------------- */
 
+/**
+ * صور اللبسة. القسم والرابط ف الـnav كيختافيو بجوجهم إلا ماكانت حتى صورة —
+ * رابط كيدي لقسم مخبي أسوأ من غياب الرابط.
+ */
+export function renderLookbook(section, track, navLink, shots) {
+  const empty = shots.length === 0;
+  section.hidden = empty;
+  if (navLink) navLink.hidden = empty;
+  if (empty) return;
+
+  track.innerHTML = shots
+    .map(
+      (s, i) => `
+      <figure class="worn__shot">
+        <img src="${s.src}" srcset="${s.srcset}"
+             sizes="(max-width: 600px) 78vw, 360px"
+             width="${s.width}" height="${s.height}"
+             alt="${t('worn.alt')} — ${i + 1}"
+             loading="lazy" decoding="async" />
+      </figure>`
+    )
+    .join('');
+}
+
 export function renderSizeTable(tbody, sizes) {
   tbody.innerHTML = sizes
     .map(

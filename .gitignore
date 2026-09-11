@@ -12,3 +12,7 @@ dist/
 raw/
 
 .vercel
+
+# كاش ديال Python — كيتبدل مع كل تشغيل للسكريبتات
+__pycache__/
+*.pyc
