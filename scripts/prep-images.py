@@ -711,10 +711,16 @@ def process_lookbook():
         raw_size = img.size
         img, (t, b, l, r) = crop_bars(img)
 
+        # save_sizes كيتجاهل أي عرض أكبر من الصورة (ماكيكبرش). صورة 900 كانت
+        # غادي تنشر 640 كأكبر حجم وتضيع 260px — العرض الأصلي كيولي هو الأكبر.
+        widths = LOOK_WIDTHS
+        if img.width < max(LOOK_WIDTHS):
+            widths = sorted({*LOOK_WIDTHS, img.width}, reverse=True)
+
         manifest[src.stem] = {
             "src": save_sizes(
                 img, src.stem, "", out=LOOKBOOK_OUT,
-                widths=LOOK_WIDTHS, url_base="/lookbook",
+                widths=widths, url_base="/lookbook",
             ),
             "width": img.width,
             "height": img.height,
