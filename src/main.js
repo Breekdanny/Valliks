@@ -19,8 +19,8 @@ import { contactLink } from './lib/whatsapp.js';
 import { initAnalytics } from './lib/analytics.js';
 import { createOrderModal } from './components/order.js';
 import { createCustomSection } from './components/custom.js';
-import {
-  renderSlides,
+import { inject } from '@vercel/analytics';
+  r
   renderGrid,
   renderSizeTable,
   renderLookbook,
@@ -223,3 +223,4 @@ onLangChange(() => {
 /* التتبع آخر حاجة عن قصد: كيتسنى حدث `load`، والمعرّف الخاوي = ماكيتحمل
    حتى سكريبت. شوف lib/analytics.js وSHOP.analytics ف data/products.js */
 initAnalytics();
+inject();
