@@ -21,6 +21,7 @@ import { createOrderModal } from './components/order.js';
 import { createCustomSection } from './components/custom.js';
 import { inject } from '@vercel/analytics';
 import {
+  renderSlides,
   renderGrid,
   renderSizeTable,
   renderLookbook,
