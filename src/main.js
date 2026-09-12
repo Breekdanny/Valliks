@@ -20,7 +20,7 @@ import { initAnalytics } from './lib/analytics.js';
 import { createOrderModal } from './components/order.js';
 import { createCustomSection } from './components/custom.js';
 import { inject } from '@vercel/analytics';
-  r
+import {
   renderGrid,
   renderSizeTable,
   renderLookbook,
